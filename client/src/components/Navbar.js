@@ -18,27 +18,40 @@ const Navbar = () => {
         <ul className="navbar-nav">
           <li className="nav-item">
             <a className="nav-link" href="">
-              Stores
+              <i class="fas fa-store" /> Stores
             </a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="">
-              Tags
+              <i class="fas fa-tags" /> Tags
             </a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="">
-              Top
+              <i class="fas fa-trophy" /> Top
             </a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="">
-              Add
+              <i class="far fa-plus-square" /> Add
             </a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="">
-              Map
+              <i class="fas fa-map-marker-alt" /> Map
+            </a>
+          </li>
+        </ul>
+
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <a className="nav-link" href="">
+              Register
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="">
+              Login
             </a>
           </li>
         </ul>
