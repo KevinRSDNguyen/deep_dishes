@@ -5,6 +5,19 @@ const passport = require("passport");
 
 const Store = require("./../../models/Store");
 
+// @route   GET api/stores/
+// @desc    Get all stores
+// @access  Public
+router.get("/", (req, res) => {
+  return Store.find()
+    .then(stores => {
+      res.json(stores);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
 // @route   POST api/stores/add
 // @desc    Add store
 // @access  Private
