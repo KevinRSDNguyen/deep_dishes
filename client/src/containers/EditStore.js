@@ -12,7 +12,8 @@ class EditStore extends Component {
   onSubmit = e => {
     e.preventDefault();
     axios.post("/api/stores/add", this.state).then(res => {
-      console.log(res);
+      console.log(res.data);
+      this.props.history.push("/");
     });
   };
   onChange = e => {

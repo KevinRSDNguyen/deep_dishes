@@ -9,7 +9,10 @@ const Store = require("./../../models/Store");
 // @desc    Add store
 // @access  Private
 router.post("/add", (req, res) => {
-  res.json(req.body);
+  const newStore = new Store(req.body);
+  newStore.save().then(store => {
+    res.json(store);
+  });
 });
 
 module.exports = router;
