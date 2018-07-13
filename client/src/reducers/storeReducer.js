@@ -1,4 +1,4 @@
-import { GET_STORES } from "../actions/types";
+import { GET_STORES, GET_STORE } from "../actions/types";
 
 const initialState = {
   stores: [],
@@ -12,6 +12,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         stores: action.payload,
+        loading: false
+      };
+    case GET_STORE:
+      return {
+        ...state,
+        store: action.payload,
         loading: false
       };
     default:

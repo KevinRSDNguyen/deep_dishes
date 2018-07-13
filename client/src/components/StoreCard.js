@@ -44,7 +44,11 @@ class StoreCard extends Component {
                 .join(" ")}
             </li>
             <li className="list-group-item">
-              <button>soon</button>
+              <button>
+                <Link to={`/stores/${this.props._id}/edit`}>
+                  <i className="far fa-edit" /> Edit
+                </Link>
+              </button>
             </li>
           </ul>
         </div>

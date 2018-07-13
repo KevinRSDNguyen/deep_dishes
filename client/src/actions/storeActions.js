@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_STORES } from "./types";
+import { GET_STORES, GET_STORE } from "./types";
 
 export const getStores = () => dispatch => {
   axios
@@ -15,6 +15,23 @@ export const getStores = () => dispatch => {
       dispatch({
         type: GET_STORES,
         payload: null
+      });
+    });
+};
+
+export const getStore = id => dispatch => {
+  axios
+    .get(`/api/stores/${id}`)
+    .then(({ data }) => {
+      dispatch({
+        type: GET_STORE,
+        payload: data
+      });
+    })
+    .catch(({ response }) => {
+      dispatch({
+        type: GET_STORE,
+        payload: {}
       });
     });
 };

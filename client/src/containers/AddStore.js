@@ -1,38 +1,20 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { getStore } from "./../actions/storeActions";
+import axios from "axios";
+// import Aux from "./../hoc/Auxx/Auxx";
 import { choices } from "./../utility/tags";
 
-class EditStore extends Component {
+class AddStore extends Component {
   state = {
     name: "",
     description: "",
     tags: []
   };
-  componentDidMount() {
-    this.props.getStore(this.props.match.params.id);
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    //This fills in fields if existing store comes in
-    if (
-      Object.keys(nextProps.store.store).length > 0 //Avoids errors if user accesses this page without a profile aka empty obj
-    ) {
-      const store = nextProps.store.store;
-
-      return {
-        name: store.name,
-        description: store.description,
-        tags: store.tags
-      };
-    }
-    return prevState;
-  }
   onSubmit = e => {
     e.preventDefault();
-    // axios.post("/api/stores/add", this.state).then(res => {
-    //   console.log(res.data);
-    //   this.props.history.push("/");
-    // });
+    axios.post("/api/stores/add", this.state).then(res => {
+      console.log(res.data);
+      this.props.history.push("/");
+    });
   };
   onChange = e => {
     this.setState({
@@ -58,7 +40,6 @@ class EditStore extends Component {
             id={choice}
             value={choice}
             onChange={this.onCheck}
-            checked={this.state.tags.includes(choice)}
           />
           <label className="form-check-label">{choice}</label>
         </div>
@@ -67,7 +48,7 @@ class EditStore extends Component {
 
     return (
       <div>
-        <h1>Edit STORE</h1>
+        <h1>ADD STORE</h1>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Name</label>
@@ -100,11 +81,5 @@ class EditStore extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { store: state.store };
-};
-
-export default connect(
-  mapStateToProps,
-  { getStore }
-)(EditStore);
+export default AddStore;
+// encType="multipart/form-data"

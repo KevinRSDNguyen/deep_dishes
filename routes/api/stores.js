@@ -28,4 +28,32 @@ router.post("/add", (req, res) => {
   });
 });
 
+// @route   GET api/stores/:id/
+// @desc    Get a store
+// @access  Public
+router.get("/:id", (req, res) => {
+  Store.findOne({ _id: req.params.id })
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+// @route   POST api/stores/:id/edit
+// @desc    Edit store
+// @access  Private
+router.post("/:id/edit", (req, res) => {
+  Store.findOne({ _id: req.params.id })
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+  //Confirm they are the owner of the store
+  //Edit!
+});
+
 module.exports = router;
