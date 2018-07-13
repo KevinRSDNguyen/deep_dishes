@@ -31,14 +31,21 @@ class StoreCard extends Component {
       <div className="col-md-3">
         <div className="card">
           {img}
-
           <div className="card-body">
             <h2>
               <Link to={`/store/${this.props.slug}`}>{this.props.name}</Link>
             </h2>
           </div>
           <ul className="list-group list-group-flush">
-            <li className="list-group-item">{this.props.description}</li>
+            <li className="list-group-item">
+              {this.props.description
+                .split(" ")
+                .slice(0, 25)
+                .join(" ")}
+            </li>
+            <li className="list-group-item">
+              <button>soon</button>
+            </li>
           </ul>
         </div>
       </div>
