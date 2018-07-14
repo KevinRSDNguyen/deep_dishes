@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import StoreForm from "./StoreForm";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getStore } from "./../actions/storeActions";
+import { getStore, editStore } from "./../actions/storeActions";
+
+import StoreForm from "./StoreForm";
+import Spinner from "./../components/Spinner/Spinner";
 
 class EditStore extends Component {
   state = {
@@ -15,12 +17,7 @@ class EditStore extends Component {
   }
 
   onSubmit = store => {
-    axios
-      .post(`/api/stores/${this.props.match.params.id}/edit`, store)
-      .then(res => {
-        console.log(res.data);
-        // this.props.getStore(this.props.match.params.id);
-      });
+    this.props.editStore(this.props.match.params.id, store, this.props.history);
   };
   render() {
     return (
@@ -29,7 +26,7 @@ class EditStore extends Component {
         {this.props.store.store ? (
           <StoreForm onSubmit={this.onSubmit} store={this.props.store.store} />
         ) : (
-          <p>please hold</p>
+          <Spinner />
         )}
       </div>
     );
@@ -42,5 +39,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getStore }
+  { getStore, editStore }
 )(EditStore);

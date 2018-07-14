@@ -5,7 +5,8 @@ class StoreForm extends Component {
   state = {
     name: this.props.store ? this.props.store.name : "",
     description: this.props.store ? this.props.store.description : "",
-    tags: this.props.store ? this.props.store.description : []
+    tags: this.props.store ? this.props.store.tags : [],
+    slug: this.props.store ? this.props.store.slug : ""
   };
   onSubmit = e => {
     e.preventDefault();
@@ -34,6 +35,7 @@ class StoreForm extends Component {
             className="form-check-input"
             id={choice}
             value={choice}
+            checked={this.state.tags.includes(choice)}
             onChange={this.onCheck}
           />
           <label className="form-check-label">{choice}</label>

@@ -1,4 +1,9 @@
-import { GET_STORES, GET_STORE } from "../actions/types";
+import {
+  GET_STORES,
+  GET_STORE,
+  CLEAR_STORE,
+  STORE_LOADING
+} from "../actions/types";
 
 const initialState = {
   stores: [],
@@ -14,7 +19,7 @@ export default (state = initialState, action) => {
         stores: action.payload,
         loading: false
       };
-    case "CLEAR_STORE":
+    case CLEAR_STORE:
       return {
         ...state,
         store: null
@@ -24,6 +29,11 @@ export default (state = initialState, action) => {
         ...state,
         store: action.payload,
         loading: false
+      };
+    case STORE_LOADING:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
+import Spinner from "./../components/Spinner/Spinner";
+import { connect } from "react-redux";
+import { addStore } from "./../actions/storeActions";
 import axios from "axios";
 import StoreForm from "./StoreForm";
 
 class AddStore extends Component {
   onSubmit = store => {
-    axios.post("/api/stores/add", store).then(res => {
-      console.log(res.data);
-      this.props.history.push("/");
-    });
+    this.props.addStore(store, this.props.history);
   };
   render() {
     return (
@@ -19,5 +19,7 @@ class AddStore extends Component {
   }
 }
 
-export default AddStore;
-// encType="multipart/form-data"
+export default connect(
+  null,
+  { addStore }
+)(AddStore);
