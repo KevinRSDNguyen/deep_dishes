@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import Spinner from "./../components/Spinner/Spinner";
 import { connect } from "react-redux";
 import { addStore } from "./../actions/storeActions";
-import axios from "axios";
 import StoreForm from "./StoreForm";
 
 class AddStore extends Component {

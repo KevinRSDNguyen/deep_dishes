@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
       res.json(stores);
     })
     .catch(err => {
-      res.json(err);
+      res.status(400).json(err);
     });
 });
 
@@ -26,10 +26,12 @@ router.post("/add", (req, res) => {
   newStore
     .save()
     .then(store => {
+      console.log("sucess");
       res.json(store);
     })
     .catch(err => {
-      res.json(err);
+      console.log("err", err);
+      res.status(400).json(err);
     });
 });
 
@@ -42,7 +44,7 @@ router.get("/:id", (req, res) => {
       res.json(store);
     })
     .catch(err => {
-      res.json(err);
+      res.status(400).json(err);
     });
 });
 
@@ -59,7 +61,7 @@ router.post("/:id/edit", (req, res) => {
       res.json(store);
     })
     .catch(err => {
-      res.json(err);
+      res.status(400).json(err);
     });
   //Confirm they are the owner of the store
   //Edit!
