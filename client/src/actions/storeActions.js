@@ -14,7 +14,7 @@ export const getStores = () => dispatch => {
     .catch(({ response }) => {
       dispatch({
         type: GET_STORES,
-        payload: null
+        payload: []
       });
     });
 };

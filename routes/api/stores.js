@@ -23,9 +23,14 @@ router.get("/", (req, res) => {
 // @access  Private
 router.post("/add", (req, res) => {
   const newStore = new Store(req.body);
-  newStore.save().then(store => {
-    res.json(store);
-  });
+  newStore
+    .save()
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });
 
 // @route   GET api/stores/:id/
@@ -45,7 +50,11 @@ router.get("/:id", (req, res) => {
 // @desc    Edit store
 // @access  Private
 router.post("/:id/edit", (req, res) => {
-  Store.findOne({ _id: req.params.id })
+  Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true
+  })
+    .exec()
     .then(store => {
       res.json(store);
     })
