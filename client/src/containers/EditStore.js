@@ -19,14 +19,18 @@ class EditStore extends Component {
       .post(`/api/stores/${this.props.match.params.id}/edit`, store)
       .then(res => {
         console.log(res.data);
-        this.props.getStore(this.props.match.params.id);
+        // this.props.getStore(this.props.match.params.id);
       });
   };
   render() {
     return (
       <div>
         <h1>Edit Store</h1>
-        <StoreForm onSubmit={this.onSubmit} store={this.props.store.store} />
+        {this.props.store.store ? (
+          <StoreForm onSubmit={this.onSubmit} store={this.props.store.store} />
+        ) : (
+          <p>please hold</p>
+        )}
       </div>
     );
   }

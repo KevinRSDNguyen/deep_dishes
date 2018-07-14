@@ -20,6 +20,7 @@ export const getStores = () => dispatch => {
 };
 
 export const getStore = id => dispatch => {
+  dispatch({ type: "CLEAR_STORE" });
   axios
     .get(`/api/stores/${id}`)
     .then(({ data }) => {
