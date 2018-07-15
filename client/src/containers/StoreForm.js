@@ -13,7 +13,6 @@ class StoreForm extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
     this.props.onSubmit(this.state);
   };
   onChange = e => {
@@ -24,8 +23,24 @@ class StoreForm extends Component {
   onAddressChange = e => {
     const copyState = {
       ...this.state,
-      location: { ...this.state.location }
+      location: {
+        ...this.state.location,
+        coordinates: [...this.state.location.coordinates]
+      }
     };
+
+    const google = window.google; //reactjs use a linting rule that forbids unknown global variables.
+    let dropdown = new google.maps.places.Autocomplete(e.target);
+    dropdown.addListener("place_changed", () => {
+      const place = dropdown.getPlace();
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+      copyState.location.address = place.formatted_address;
+      copyState.location.coordinates[1] = lat;
+      copyState.location.coordinates[0] = lng;
+      this.setState({ location: copyState.location });
+    });
+
     copyState.location.address = e.target.value;
     this.setState({
       location: copyState.location
@@ -89,6 +104,7 @@ class StoreForm extends Component {
             className="form-control"
             onChange={this.onChange}
             value={this.state.name}
+            required
           />
         </div>
         <div className="form-group">
@@ -110,6 +126,7 @@ class StoreForm extends Component {
             className="form-control"
             onChange={this.onAddressChange}
             value={this.state.location.address}
+            required
           />
         </div>
         <div className="form-group">
