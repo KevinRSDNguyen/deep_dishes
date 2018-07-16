@@ -52,14 +52,13 @@ router.get("/:id", (req, res) => {
 // @desc    Get a store by slug
 // @access  Public
 router.get("/slug/:slug", (req, res) => {
-  // Store.findOne({ _id: req.params.id })
-  //   .then(store => {
-  //     res.json(store);
-  //   })
-  //   .catch(err => {
-  //     res.status(400).json(err);
-  //   });
-  res.send("it works!");
+  Store.findOne({ slug: req.params.slug })
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
 });
 
 // @route   POST api/stores/:id/edit

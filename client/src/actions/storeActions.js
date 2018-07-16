@@ -45,7 +45,6 @@ export const getStoreBySlug = slug => dispatch => {
   axios
     .get(`/api/stores/slug/${slug}`)
     .then(({ data }) => {
-      console.log(data);
       dispatch({
         type: GET_STORE,
         payload: data
