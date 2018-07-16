@@ -24,21 +24,21 @@ class Store extends Component {
       const img = this.state.imgError ? (
         <img
           src={placeHolderImg}
-          className="img-fluid"
+          className="img-fluid d-block mx-auto"
           onError={this.onImgError}
           alt=""
         />
       ) : (
         <img
           src={store.photo || placeHolderImg}
-          className="img-fluid"
+          className="img-fluid d-block mx-auto"
           onError={this.onImgError}
           alt=""
         />
       );
       const tags = store.tags.map(tag => {
         return (
-          <span>
+          <span key={tag}>
             <Link className="mx-3 btn btn-warning" to={`/tags/${tag}`}>
               {"#" + tag}
             </Link>

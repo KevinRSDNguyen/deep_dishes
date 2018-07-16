@@ -5,6 +5,7 @@ class StoreForm extends Component {
   state = {
     name: this.props.store ? this.props.store.name : "",
     description: this.props.store ? this.props.store.description : "",
+    photo: this.props.store ? this.props.store.photo : "",
     tags: this.props.store ? this.props.store.tags : [],
     slug: this.props.store ? this.props.store.slug : "",
     location: this.props.store
@@ -114,6 +115,15 @@ class StoreForm extends Component {
             className="form-control"
             onChange={this.onChange}
             value={this.state.description}
+          />
+        </div>
+        <div className="form-group">
+          <label>Photo</label>
+          <textarea
+            name="photo"
+            className="form-control"
+            onChange={this.onChange}
+            value={this.state.photo}
           />
         </div>
         {/* address, lng and lat */}

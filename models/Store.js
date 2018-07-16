@@ -13,6 +13,10 @@ const storeSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  photo: {
+    type: String,
+    trim: true
+  },
   tags: [String],
   created: {
     type: Date,
@@ -43,8 +47,15 @@ storeSchema.pre("save", function(next) {
     return;
   }
   this.slug = slug(this.name);
-  next();
-  //TODO make more resilient so slugs must be unique
+  //See if there are stores with same slug
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, "i");
+  this.constructor.find({ slug: slugRegEx }).then(storesWithSlug => {
+    console.log(storesWithSlug);
+    if (storesWithSlug.length > 0) {
+      this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
+    }
+    next();
+  });
 });
 
 module.exports = mongoose.model("Store", storeSchema);
