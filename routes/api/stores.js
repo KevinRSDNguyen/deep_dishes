@@ -36,7 +36,7 @@ router.post("/add", (req, res) => {
 });
 
 // @route   GET api/stores/:id/
-// @desc    Get a store
+// @desc    Get a store by id
 // @access  Public
 router.get("/:id", (req, res) => {
   Store.findOne({ _id: req.params.id })
@@ -46,6 +46,20 @@ router.get("/:id", (req, res) => {
     .catch(err => {
       res.status(400).json(err);
     });
+});
+
+// @route   GET api/stores/slug/:slug
+// @desc    Get a store by slug
+// @access  Public
+router.get("/slug/:slug", (req, res) => {
+  // Store.findOne({ _id: req.params.id })
+  //   .then(store => {
+  //     res.json(store);
+  //   })
+  //   .catch(err => {
+  //     res.status(400).json(err);
+  //   });
+  res.send("it works!");
 });
 
 // @route   POST api/stores/:id/edit

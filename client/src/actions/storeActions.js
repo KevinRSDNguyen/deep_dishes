@@ -39,6 +39,26 @@ export const getStore = id => dispatch => {
     });
 };
 
+export const getStoreBySlug = slug => dispatch => {
+  dispatch({ type: CLEAR_STORE });
+  dispatch(setStoreLoading());
+  axios
+    .get(`/api/stores/slug/${slug}`)
+    .then(({ data }) => {
+      console.log(data);
+      dispatch({
+        type: GET_STORE,
+        payload: data
+      });
+    })
+    .catch(({ response }) => {
+      dispatch({
+        type: GET_STORE,
+        payload: null
+      });
+    });
+};
+
 //Add Store
 export const addStore = (store, history) => dispatch => {
   axios
