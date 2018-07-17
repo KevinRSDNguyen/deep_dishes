@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // import Aux from "./hoc/Auxx/Auxx";
 import Navbar from "./components/Navbar";
+import Landing from "./components/Landing";
 import Store from "./components/Store";
 import Tags from "./components/Tags";
 import Stores from "./components/Stores";
@@ -23,7 +24,7 @@ class App extends Component {
             {/* <Route exact path="/" component={Stores} /> */}
             <div className="container">
               <Switch>
-                <Route exact path="/" component={Stores} />
+                <Route exact path="/" component={Landing} />
                 <Route exact path="/tags" component={Tags} />
                 <Route exact path="/tags/:tag" component={Tags} />
                 <Route exact path="/store/:slug" component={Store} />

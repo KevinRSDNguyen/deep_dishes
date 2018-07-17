@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Spinner from "./Spinner/Spinner";
-import StoreCard from "./StoreCard";
+import StoreCards from "./StoreCards";
 import { connect } from "react-redux";
 import { getTags, getStores, getStoresByTag } from "./../actions/storeActions";
 
@@ -29,16 +29,11 @@ class Tags extends Component {
         </button>
       );
     });
-    const storeCards = loading ? (
-      <Spinner />
-    ) : (
-      stores.map(store => <StoreCard key={store._id} {...store} />)
-    );
     return (
       <div>
         <h2>{this.state.selectedTag}</h2>
         {tagButtons}
-        <div className="row">{storeCards}</div>
+        <StoreCards loading={loading} stores={stores} />
       </div>
     );
   }
