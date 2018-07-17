@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Spinner from "./Spinner/Spinner";
+import Spinner from "./common/Spinner/Spinner";
 import { connect } from "react-redux";
 import { staticMap } from "./../utility/helpers";
 import { getStoreBySlug } from "./../actions/storeActions";

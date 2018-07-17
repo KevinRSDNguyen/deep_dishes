@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getStore, editStore } from "./../actions/storeActions";
 
 import StoreForm from "./StoreForm";
-import Spinner from "./../components/Spinner/Spinner";
+import Spinner from "./../components/common/Spinner/Spinner";
 
 class EditStore extends Component {
   state = {

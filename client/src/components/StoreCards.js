@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Spinner from "./Spinner/Spinner";
+import Spinner from "./common/Spinner/Spinner";
 import StoreCard from "./StoreCard";
 
 class StoreCards extends Component {
