@@ -8,6 +8,7 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import Navbar from "./components/Navbar";
 import Landing from "./components/Landing";
 import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
 import Store from "./components/Store";
 import Tags from "./components/Tags";
 import Stores from "./components/Stores";
@@ -48,6 +49,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/register" component={Register} />
+                <Route exact path="/login" component={Login} />
                 <Route exact path="/tags" component={Tags} />
                 <Route exact path="/tags/:tag" component={Tags} />
                 <Route exact path="/store/:slug" component={Store} />
