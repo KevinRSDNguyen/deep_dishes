@@ -50,12 +50,19 @@ storeSchema.pre("save", function(next) {
   //See if there are stores with same slug
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, "i");
   this.constructor.find({ slug: slugRegEx }).then(storesWithSlug => {
-    console.log(storesWithSlug);
     if (storesWithSlug.length > 0) {
       this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
     }
     next();
   });
 });
+
+storeSchema.statics.getTagsList = function() {
+  return this.aggregate([
+    { $unwind: "$tags" }, //if a restaurant has three tags, it will return the three copies of the restaurant but each with a different tag.
+    { $group: { _id: "$tags", count: { $sum: 1 } } },
+    { $sort: { count: -1 } } //sort by count descending
+  ]);
+};
 
 module.exports = mongoose.model("Store", storeSchema);

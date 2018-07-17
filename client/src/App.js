@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // import Aux from "./hoc/Auxx/Auxx";
 import Navbar from "./components/Navbar";
 import Store from "./components/Store";
+import Tags from "./components/Tags";
 import Stores from "./components/Stores";
 import AddStore from "./containers/AddStore";
 import EditStore from "./containers/EditStore";
@@ -23,6 +24,8 @@ class App extends Component {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Stores} />
+                <Route exact path="/tags" component={Tags} />
+                <Route exact path="/tags/:tag" component={Tags} />
                 <Route exact path="/store/:slug" component={Store} />
                 <Route exact path="/add" component={AddStore} />
                 <Route exact path="/stores/:id/edit" component={EditStore} />

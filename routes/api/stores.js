@@ -38,7 +38,7 @@ router.post("/add", (req, res) => {
 // @route   GET api/stores/:id/
 // @desc    Get a store by id
 // @access  Public
-router.get("/:id", (req, res) => {
+router.get("/id/:id", (req, res) => {
   Store.findOne({ _id: req.params.id })
     .then(store => {
       res.json(store);
@@ -64,7 +64,7 @@ router.get("/slug/:slug", (req, res) => {
 // @route   POST api/stores/:id/edit
 // @desc    Edit store
 // @access  Private
-router.post("/:id/edit", (req, res) => {
+router.post("/id/:id/edit", (req, res) => {
   Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
     runValidators: true
@@ -78,6 +78,32 @@ router.post("/:id/edit", (req, res) => {
     });
   //Confirm they are the owner of the store
   //Edit!
+});
+
+// @route   GET api/stores/tags
+// @desc    Get a count of all stores with tags
+// @access  Public
+router.get("/tags", (req, res) => {
+  Store.getTagsList()
+    .then(tags => {
+      res.json(tags);
+    })
+    .catch(err => {
+      res.status(404).json(err);
+    });
+});
+
+// @route   GET api/stores/tags/:tag
+// @desc    Get the stores with a specific tag
+// @access  Public
+router.get("/tags/:tag", (req, res) => {
+  Store.findOne({ slug: req.params.slug })
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
 });
 
 module.exports = router;

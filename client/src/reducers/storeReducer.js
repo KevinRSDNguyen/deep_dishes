@@ -2,11 +2,13 @@ import {
   GET_STORES,
   GET_STORE,
   CLEAR_STORE,
-  STORE_LOADING
+  STORE_LOADING,
+  GET_TAGS
 } from "../actions/types";
 
 const initialState = {
   stores: [],
+  tags: [],
   store: null,
   loading: false
 };
@@ -34,6 +36,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true
+      };
+    case GET_TAGS:
+      return {
+        ...state,
+        tags: action.payload,
+        loading: false
       };
     default:
       return state;
