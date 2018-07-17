@@ -97,9 +97,9 @@ router.get("/tags", (req, res) => {
 // @desc    Get the stores with a specific tag
 // @access  Public
 router.get("/tags/:tag", (req, res) => {
-  Store.findOne({ slug: req.params.slug })
-    .then(store => {
-      res.json(store);
+  Store.find({ tags: req.params.tag })
+    .then(stores => {
+      res.json(stores);
     })
     .catch(err => {
       res.status(400).json(err);
