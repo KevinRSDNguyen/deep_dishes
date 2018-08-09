@@ -4,12 +4,13 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "./utility/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 
-// import Aux from "./hoc/Auxx/Auxx";
+import PrivateRoute from "./components/common/PrivateRoute";
 import Navbar from "./components/Navbar";
 import Landing from "./components/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Store from "./components/Store";
+import Profile from "./components/auth/Profile";
+import Store from "./components/store/Store";
 import Tags from "./components/Tags";
 import AllStores from "./components/AllStores";
 import AddStore from "./containers/AddStore";
@@ -52,10 +53,11 @@ class App extends Component {
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <PrivateRoute exact path="/profile" component={Profile} />
                 <Route exact path="/tags" component={Tags} />
                 <Route exact path="/tags/:tag" component={Tags} />
                 <Route exact path="/store/:slug" component={Store} />
-                <Route exact path="/add" component={AddStore} />
+                <PrivateRoute exact path="/add" component={AddStore} />
                 <Route exact path="/stores/:id/edit" component={EditStore} />
                 <Route exact path="/stores" component={AllStores} />
                 {/* <Route exact path="/not-found" component={NotFound} /> */}

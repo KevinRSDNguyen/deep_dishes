@@ -14,13 +14,17 @@ class Navbar extends Component {
     const authLinks = (
       <React.Fragment>
         <li className="nav-item">
-          <a href="" onClick={this.onLogoutClick} className="nav-link">
+          <Link to="/profile" className="nav-link">
             <img
               className="rounded-circle"
               src={user.avatar}
               alt={user.name}
               style={{ width: "25px", marginRight: "5px" }}
             />
+          </Link>
+        </li>
+        <li className="nav-item">
+          <a href="" onClick={this.onLogoutClick} className="nav-link">
             Logout
           </a>
         </li>

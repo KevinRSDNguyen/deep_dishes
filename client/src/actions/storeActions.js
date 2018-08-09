@@ -86,34 +86,26 @@ export const getStoreBySlug = slug => dispatch => {
 
 //Add Store
 export const addStore = (store, history) => dispatch => {
-  axios
+  return axios
     .post("/api/stores/add", store)
     .then(response => {
       history.push("/");
     })
-    .catch(({ response }) => {
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   payload: response.data
-      // });
-      console.log(response.data);
+    .catch(err => {
+      return Promise.reject(err.response.data.errors);
     });
 };
 
 //Add Store
 export const editStore = (id, store, history) => dispatch => {
-  axios
+  return axios
     .post(`/api/stores/id/${id}/edit`, store)
     .then(res => {
       history.push(`/store/${store.slug}`);
       // this.props.getStore(this.props.match.params.id);
     })
-    .catch(({ response }) => {
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   payload: response.data
-      // });
-      console.log(response.data);
+    .catch(err => {
+      return Promise.reject(err.response.data.errors);
     });
 };
 

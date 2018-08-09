@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Spinner from "./common/Spinner/Spinner";
+import Spinner from "./../common/Spinner/Spinner";
 import { connect } from "react-redux";
 import StoreMap from "./StoreMap";
-import { getStoreBySlug } from "./../actions/storeActions";
-import placeHolderImg from "./../assets/images/store.jpg";
+import { getStoreBySlug } from "./../../actions/storeActions";
+import placeHolderImg from "./../../assets/images/store.jpg";
 
 class Store extends Component {
   state = {

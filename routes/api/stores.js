@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
+const { normalizeErrors } = require("../../utils/helpers");
 
 const Store = require("./../../models/Store");
 
@@ -13,27 +14,26 @@ router.get("/", (req, res) => {
     .then(stores => {
       res.json(stores);
     })
-    .catch(err => {
-      res.status(400).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   POST api/stores/add
 // @desc    Add store
 // @access  Private
-router.post("/add", (req, res) => {
-  const newStore = new Store(req.body);
-  newStore
-    .save()
-    .then(store => {
-      console.log("sucess");
-      res.json(store);
-    })
-    .catch(err => {
-      console.log("err", err);
-      res.status(400).json(err);
-    });
-});
+router.post(
+  "/add",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log(req.body);
+    const newStore = new Store(req.body);
+    newStore
+      .save()
+      .then(store => {
+        res.json(store);
+      })
+      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  }
+);
 
 // @route   GET api/stores/:id/
 // @desc    Get a store by id
@@ -43,9 +43,7 @@ router.get("/id/:id", (req, res) => {
     .then(store => {
       res.json(store);
     })
-    .catch(err => {
-      res.status(400).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   GET api/stores/slug/:slug
@@ -56,9 +54,7 @@ router.get("/slug/:slug", (req, res) => {
     .then(store => {
       res.json(store);
     })
-    .catch(err => {
-      res.status(400).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   POST api/stores/:id/edit
@@ -73,9 +69,7 @@ router.post("/id/:id/edit", (req, res) => {
     .then(store => {
       res.json(store);
     })
-    .catch(err => {
-      res.status(400).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
   //Confirm they are the owner of the store
   //Edit!
 });
@@ -88,9 +82,7 @@ router.get("/tags", (req, res) => {
     .then(tags => {
       res.json(tags);
     })
-    .catch(err => {
-      res.status(404).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   GET api/stores/tags/:tag
@@ -101,9 +93,7 @@ router.get("/tags/:tag", (req, res) => {
     .then(stores => {
       res.json(stores);
     })
-    .catch(err => {
-      res.status(400).json(err);
-    });
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
 import { getStore, editStore } from "./../actions/storeActions";
 
@@ -16,12 +17,17 @@ class EditStore extends Component {
   }
 
   onSubmit = store => {
-    this.props.editStore(this.props.match.params.id, store, this.props.history);
+    this.props
+      .editStore(this.props.match.params.id, store, this.props.history)
+      .catch(e => {
+        toast.error(e[0].detail);
+      });
   };
   render() {
     return (
       <div>
         <h1>Edit Store</h1>
+        <ToastContainer />
         {this.props.store.store ? (
           <StoreForm onSubmit={this.onSubmit} store={this.props.store.store} />
         ) : (

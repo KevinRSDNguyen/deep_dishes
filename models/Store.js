@@ -6,7 +6,8 @@ const storeSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: "Please enter a store name" //Will require it and pass this msg.
+    required: "Please enter a store name", //Will require it and pass this msg.
+    minlength: [4, "Too short, store name must be at least 4 characters."]
   },
   slug: String, // Auto generated whenever someone saves
   description: {

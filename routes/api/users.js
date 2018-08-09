@@ -6,10 +6,6 @@ const keys = require("./../../config/keys");
 const passport = require("passport");
 const { normalizeErrors } = require("../../utils/helpers");
 
-// Load Input Validation
-// const validateRegisterInput = require("../../validation/register");
-// const validateLoginInput = require("../../validation/login");
-
 //Load User Model
 const User = require("../../models/User");
 
@@ -69,8 +65,8 @@ router.post("/login", (req, res) => {
             errors: [{ detail: "Incorrect Email or Password" }]
           });
 
-        const { id, name, avatar } = user;
-        const payload = { id, name, avatar };
+        const { id, name, avatar, email } = user;
+        const payload = { id, name, avatar, email };
         jwt.sign(
           payload,
           keys.secretOrKey,
@@ -86,6 +82,25 @@ router.post("/login", (req, res) => {
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
+
+// ROUTE /api/users/update_profile
+router.post(
+  "/update_profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        $set: req.body
+      },
+      { new: true }
+    )
+      .then(doc => {
+        res.send(doc);
+      })
+      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  }
+);
 
 // @route   GET api/users/current
 // @desc    Return current user

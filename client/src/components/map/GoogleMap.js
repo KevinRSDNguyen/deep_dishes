@@ -5,7 +5,7 @@ import {
   withGoogleMap,
   GoogleMap,
   Marker,
-  Circle,
+  // Circle,
   InfoWindow // Display error if invalid address
 } from "react-google-maps";
 

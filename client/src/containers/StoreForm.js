@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import TextFieldGroup from "./../components/common/TextFieldGroup";
+import TextAreaFieldGroup from "./../components/common/TextAreaFieldGroup";
 import { choices } from "./../utility/tags";
 
 class StoreForm extends Component {
@@ -97,70 +99,54 @@ class StoreForm extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            onChange={this.onChange}
-            value={this.state.name}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            name="description"
-            className="form-control"
-            onChange={this.onChange}
-            value={this.state.description}
-          />
-        </div>
-        <div className="form-group">
-          <label>Photo</label>
-          <textarea
-            name="photo"
-            className="form-control"
-            onChange={this.onChange}
-            value={this.state.photo}
-          />
-        </div>
+        <TextFieldGroup
+          type="text"
+          label="Name"
+          name="name"
+          onChange={this.onChange}
+          value={this.state.name}
+          required
+        />
+        <TextAreaFieldGroup
+          label="Description"
+          name="description"
+          onChange={this.onChange}
+          value={this.state.description}
+        />
+        <TextAreaFieldGroup
+          label="Photo"
+          name="photo"
+          onChange={this.onChange}
+          value={this.state.photo}
+        />
         {/* address, lng and lat */}
-        <div className="form-group">
-          <label>Address</label>
-          <input
-            type="text"
-            id="address"
-            name="location[address]"
-            className="form-control"
-            onChange={this.onAddressChange}
-            value={this.state.location.address}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Address Lng</label>
-          <input
-            type="text"
-            id="lng"
-            name="location[coordinates][0]"
-            className="form-control"
-            onChange={this.onLngChange}
-            value={this.state.location.coordinates[0] || ""}
-          />
-        </div>
-        <div className="form-group">
-          <label>Address Lat</label>
-          <input
-            type="text"
-            id="lat"
-            name="location[coordinates][1]"
-            className="form-control"
-            onChange={this.onLatChange}
-            value={this.state.location.coordinates[1] || ""}
-          />
-        </div>
+        <TextFieldGroup
+          type="text"
+          id="address"
+          label="Address"
+          name="location[address]"
+          onChange={this.onAddressChange}
+          value={this.state.location.address}
+          required
+        />
+        <TextFieldGroup
+          type="text"
+          id="lng"
+          label="Address Lng"
+          name="location[coordinates][0]"
+          onChange={this.onLngChange}
+          value={this.state.location.coordinates[0] || ""}
+          required
+        />
+        <TextFieldGroup
+          type="text"
+          id="lat"
+          label="Address Lat"
+          name="location[coordinates][1]"
+          onChange={this.onLatChange}
+          value={this.state.location.coordinates[1] || ""}
+          required
+        />
 
         {tagChoices}
         <input
