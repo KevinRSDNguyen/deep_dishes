@@ -1,28 +1,39 @@
 import React, { Component } from "react";
 import classNames from "classnames";
-import StoreCards from "./StoreCards";
+import Stores from "./Stores";
 import { connect } from "react-redux";
 import { getTags, getStores, getStoresByTag } from "./../actions/storeActions";
 
 class Tags extends Component {
-  state = {
-    selectedTag: "Tags"
-  };
   componentDidMount() {
     this.props.getTags();
-    this.props.getStores();
+    const { tag } = this.props.match.params;
+    if (tag) {
+      this.props.getStoresByTag(tag);
+    } else {
+      this.props.getStores();
+    }
+  }
+  componentDidUpdate(prevProps) {
+    const tag = this.props.match.params.tag;
+    const prevTag = prevProps.match.params.tag;
+    if (tag !== prevTag && tag) {
+      this.props.getStoresByTag(tag);
+    } else if (tag !== prevTag && !tag) {
+      this.props.getStores();
+    }
   }
   onTagClick = _id => {
-    this.props.getStoresByTag(_id);
-    this.setState({ selectedTag: _id });
+    this.props.history.push(`/tags/${_id}`);
   };
   render() {
-    const { tags, stores, loading } = this.props.store;
+    const { tags, stores } = this.props.store;
+    const tagParam = this.props.match.params.tag;
     const tagButtons = tags.map(tag => {
       const tagButtonClasses = classNames(
         "btn mx-2",
-        { "btn-success": this.state.selectedTag === tag._id },
-        { "btn-warning": this.state.selectedTag !== tag._id }
+        { "btn-success": tagParam === tag._id },
+        { "btn-warning": tagParam !== tag._id }
       );
       return (
         <button
@@ -37,9 +48,9 @@ class Tags extends Component {
 
     return (
       <div>
-        <h2>{this.state.selectedTag}</h2>
+        <h2>{tagParam}</h2>
         {tagButtons}
-        <StoreCards loading={loading} stores={stores} />
+        <Stores stores={stores} />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
 import { registerUser } from "./../../actions/authActions";
-import clearErrors from "./../../actions/errorsActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
 
 class Register extends Component {
@@ -15,9 +15,6 @@ class Register extends Component {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/stores");
     }
-  }
-  componentWillUnmount() {
-    this.props.clearErrors();
   }
   onChange = e => {
     this.setState({
@@ -33,12 +30,27 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    if (newUser.password !== newUser.password2) {
+      return toast.error("Passwords must match.");
+    }
+
+    registerUser(newUser)
+      .then(response => {
+        toast.success(
+          "Successfully Registered. You will be redirected in a few seconds."
+        );
+        setTimeout(() => {
+          this.props.history.push("/login");
+        }, 4000);
+      })
+      .catch(e => {
+        toast.error(e[0].detail);
+      });
   };
   render() {
-    const { errors } = this.props;
     return (
       <div className="register">
+        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -53,7 +65,7 @@ class Register extends Component {
                   name="name"
                   value={this.state.name}
                   onChange={this.onChange}
-                  error={errors.name}
+                  required
                 />
                 <TextFieldGroup
                   type="email"
@@ -61,7 +73,7 @@ class Register extends Component {
                   name="email"
                   value={this.state.email}
                   onChange={this.onChange}
-                  error={errors.email}
+                  required
                 />
                 <TextFieldGroup
                   type="password"
@@ -69,7 +81,7 @@ class Register extends Component {
                   name="password"
                   value={this.state.password}
                   onChange={this.onChange}
-                  error={errors.password}
+                  required
                 />
                 <TextFieldGroup
                   type="password"
@@ -77,7 +89,7 @@ class Register extends Component {
                   name="password2"
                   value={this.state.password2}
                   onChange={this.onChange}
-                  error={errors.password2}
+                  required
                 />
                 <input
                   type="submit"
@@ -99,7 +111,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { registerUser, clearErrors }
-)(Register);
+export default connect(mapStateToProps)(Register);

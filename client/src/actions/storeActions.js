@@ -9,6 +9,7 @@ import {
 } from "./types";
 
 export const getStores = () => dispatch => {
+  dispatch({ type: CLEAR_STORE });
   dispatch(setStoreLoading());
   axios
     .get(`/api/stores`)
@@ -27,6 +28,7 @@ export const getStores = () => dispatch => {
 };
 
 export const getStoresByTag = tag => dispatch => {
+  dispatch({ type: CLEAR_STORE });
   dispatch(setStoreLoading());
   axios
     .get(`/api/stores/tags/${tag}`)
@@ -116,7 +118,7 @@ export const editStore = (id, store, history) => dispatch => {
 };
 
 export const getTags = () => dispatch => {
-  // dispatch({ type: CLEAR_STORE });
+  dispatch({ type: CLEAR_STORE });
   // dispatch(setStoreLoading());
   axios
     .get(`/api/stores/tags`)

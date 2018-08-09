@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("./../../config/keys");
 const passport = require("passport");
+const { normalizeErrors } = require("../../utils/helpers");
 
 // Load Input Validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
+// const validateRegisterInput = require("../../validation/register");
+// const validateLoginInput = require("../../validation/login");
 
 //Load User Model
 const User = require("../../models/User");
@@ -24,17 +24,8 @@ router.get("/test", (req, res) => {
 // @desc    Register User
 // @access  Public
 router.post("/register", (req, res) => {
-  const { errors, isValid } = validateRegisterInput(req.body);
-
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
-  User.findOne({ email: req.body.email }).then(user => {
-    if (user) {
-      errors.email = "Email already exists";
-      return res.status(400).json(errors);
-    } else {
+  User.findOne({ email: req.body.email })
+    .then(user => {
       const avatar = gravatar.url(req.body.email, {
         s: "200", // Size
         r: "pg", // Rating
@@ -48,53 +39,42 @@ router.post("/register", (req, res) => {
         password: req.body.password
       });
 
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => {
-              res.json(user);
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        });
-      });
-    }
-  });
+      return newUser.save();
+    })
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   GET api/users/login
 // @desc    Login User / Returning JWT token
 // @access  Public
 router.post("/login", (req, res) => {
-  const { errors, isValid } = validateLoginInput(req.body);
-
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
   const { email, password } = req.body;
 
-  User.findOne({ email }).then(user => {
-    //Check for User
-    if (!user) {
-      errors.login = "Incorrect User/Password combination";
-      return res.status(404).json(errors);
-    }
+  User.findOne({ email })
+    .then(user => {
+      //Check for User
+      if (!user) {
+        return res.status(422).json({
+          errors: [{ detail: "Incorrect Email or Password" }]
+        });
+      }
 
-    //Check password
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
+      //Check password
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        if (!isMatch)
+          return res.status(400).json({
+            errors: [{ detail: "Incorrect Email or Password" }]
+          });
+
         const { id, name, avatar } = user;
         const payload = { id, name, avatar };
-
         jwt.sign(
           payload,
           keys.secretOrKey,
-          { expiresIn: 3600 }, //3600
+          { expiresIn: 3600 },
           (err, token) => {
             res.json({
               success: true,
@@ -102,12 +82,9 @@ router.post("/login", (req, res) => {
             });
           }
         );
-      } else {
-        errors.login = "Incorrect User/Password combination";
-        return res.status(400).json(errors);
-      }
-    });
-  });
+      });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 // @route   GET api/users/current

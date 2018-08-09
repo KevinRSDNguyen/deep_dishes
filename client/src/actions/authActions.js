@@ -2,29 +2,25 @@ import axios from "axios";
 import setAuthToken from "./../utility/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { SET_CURRENT_USER } from "./types";
 
 //Register User
-export const registerUser = (userData, history) => dispatch => {
-  axios
+export const registerUser = userData => {
+  return axios
     .post("/api/users/register", userData)
     .then(({ data }) => {
-      history.push("/login");
+      return data;
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      return Promise.reject(err.response.data.errors);
     });
 };
 
 //Login - Get User Token
 export const loginUser = userData => dispatch => {
-  axios
+  return axios
     .post("/api/users/login", userData)
-    .then(({ data }) => {
-      const { token } = data;
+    .then(({ data: { token } }) => {
       //Set token to local storage
       localStorage.setItem("jwtToken", token);
       //Set token to auth header
@@ -33,12 +29,10 @@ export const loginUser = userData => dispatch => {
       const decoded = jwt_decode(token);
       //Set current User
       dispatch(setCurrentUser(decoded));
+      return "Done";
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      return Promise.reject(err.response.data.errors);
     });
 };
 

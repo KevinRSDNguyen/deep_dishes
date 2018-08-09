@@ -1,29 +1,14 @@
 import React, { Component } from "react";
-import Aux from "./../hoc/Auxx/Auxx";
-import { connect } from "react-redux";
-import StoreCards from "./StoreCards";
-import { getStores } from "./../actions/storeActions";
+import StoreCard from "./StoreCard";
 
 class Stores extends Component {
-  componentDidMount() {
-    this.props.getStores();
-  }
   render() {
-    const { stores, loading } = this.props.store;
-    return (
-      <Aux>
-        <h1>Stores</h1>
-        <StoreCards stores={stores} loading={loading} />
-      </Aux>
-    );
+    const { stores } = this.props;
+    const storeCards = stores.map(store => (
+      <StoreCard key={store._id} {...store} />
+    ));
+    return <div className="row">{storeCards}</div>;
   }
 }
 
-const mapStateToProps = state => {
-  return { store: state.store };
-};
-
-export default connect(
-  mapStateToProps,
-  { getStores }
-)(Stores);
+export default Stores;

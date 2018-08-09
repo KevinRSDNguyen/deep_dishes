@@ -24,7 +24,8 @@ export default (state = initialState, action) => {
     case CLEAR_STORE:
       return {
         ...state,
-        store: null
+        store: null,
+        stores: []
       };
     case GET_STORE:
       return {

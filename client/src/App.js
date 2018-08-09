@@ -11,7 +11,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Store from "./components/Store";
 import Tags from "./components/Tags";
-import Stores from "./components/Stores";
+import AllStores from "./components/AllStores";
 import AddStore from "./containers/AddStore";
 import EditStore from "./containers/EditStore";
 import "./App.css";
@@ -21,20 +21,22 @@ import store from "./store";
 
 //Check for token
 if (localStorage.jwtToken) {
-  //Set auth token header auth
-  setAuthToken(localStorage.jwtToken);
-  //Decode token and get user info and exp
-  const decoded = jwt_decode(localStorage.jwtToken);
-  //Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
+  try {
+    //Set auth token header auth
+    setAuthToken(localStorage.jwtToken);
+    //Decode token and get user info and exp
+    const decoded = jwt_decode(localStorage.jwtToken);
+    //Set user and isAuthenticated
+    store.dispatch(setCurrentUser(decoded));
 
-  //Check for expire token
-  const currentTime = Date.now() / 1000;
-  if (decoded.exp < currentTime) {
-    store.dispatch(logoutUser());
-    // store.dispatch(clearCurrentProfile());
-    window.location.href = "/stores";
-  }
+    //Check for expire token
+    const currentTime = Date.now() / 1000;
+    if (decoded.exp < currentTime) {
+      store.dispatch(logoutUser());
+      // store.dispatch(clearCurrentProfile());
+      window.location.href = "/stores";
+    }
+  } catch (err) {} //Try catch block n case of invalid token
 }
 
 class App extends Component {
@@ -55,7 +57,7 @@ class App extends Component {
                 <Route exact path="/store/:slug" component={Store} />
                 <Route exact path="/add" component={AddStore} />
                 <Route exact path="/stores/:id/edit" component={EditStore} />
-                <Route exact path="/stores" component={Stores} />
+                <Route exact path="/stores" component={AllStores} />
                 {/* <Route exact path="/not-found" component={NotFound} /> */}
               </Switch>
             </div>

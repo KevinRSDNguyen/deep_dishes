@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { loginUser } from "./../../actions/authActions";
-import clearErrors from "./../../actions/errorsActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
 
 class Login extends Component {
@@ -10,9 +10,6 @@ class Login extends Component {
     email: "",
     password: ""
   };
-  componentWillUnmount() {
-    this.props.clearErrors();
-  }
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -20,17 +17,18 @@ class Login extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    const userData = { email: this.state.email, password: this.state.password };
-    this.props.loginUser(userData);
+    this.props.loginUser(this.state).catch(e => {
+      toast.error(e[0].detail);
+    });
   };
   render() {
-    const { errors } = this.props;
     let authRedirect = this.props.auth.isAuthenticated ? (
       <Redirect to="/stores" />
     ) : null;
 
     return (
       <div className="login">
+        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -46,7 +44,7 @@ class Login extends Component {
                   name="email"
                   value={this.state.email}
                   onChange={this.onChange}
-                  error={errors.email}
+                  required
                 />
                 <TextFieldGroup
                   type="password"
@@ -54,7 +52,7 @@ class Login extends Component {
                   name="password"
                   value={this.state.password}
                   onChange={this.onChange}
-                  error={errors.login}
+                  required
                 />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
@@ -68,12 +66,11 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth,
-    errors: state.errors
+    auth: state.auth
   };
 };
 
 export default connect(
   mapStateToProps,
-  { loginUser, clearErrors }
+  { loginUser }
 )(Login);
