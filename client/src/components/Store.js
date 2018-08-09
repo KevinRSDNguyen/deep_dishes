@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "./common/Spinner/Spinner";
 import { connect } from "react-redux";
-import { staticMap } from "./../utility/helpers";
+import StoreMap from "./StoreMap";
 import { getStoreBySlug } from "./../actions/storeActions";
 import placeHolderImg from "./../assets/images/store.jpg";
 
@@ -49,13 +49,9 @@ class Store extends Component {
       storeContent = (
         <div>
           <div className="row">
-            <div className="col-12">{img}</div>
-            <div className="col-12">
-              <img
-                className="img-fluid"
-                src={staticMap(store.location.coordinates)}
-                alt=""
-              />
+            <div className="col-md-6">{img}</div>
+            <div className="col-md-6">
+              <StoreMap location={store.location} />
             </div>
           </div>
           <h2>{store.name}</h2>
