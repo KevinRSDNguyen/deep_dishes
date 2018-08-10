@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import TextFieldGroup from "./../common/TextFieldGroup";
 import { connect } from "react-redux";
-import { updateProfile } from "./../../actions/authActions";
+import { updateProfile, auth } from "./../../actions/authActions";
 
 class Profile extends Component {
   state = {
@@ -16,17 +16,16 @@ class Profile extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    this.props
-      .updateProfile(this.state)
+    updateProfile(this.state)
       .then(response => {
         toast.success("Successfully Updated your info");
+        this.props.auth();
       })
       .catch(e => {
         toast.error(e[0].detail);
       });
   };
   render() {
-    // const { user } = this.props;
     return (
       <div>
         <ToastContainer />
@@ -57,11 +56,7 @@ class Profile extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   auth: state.auth
-// });
-
 export default connect(
   null,
-  { updateProfile }
+  { auth }
 )(Profile);

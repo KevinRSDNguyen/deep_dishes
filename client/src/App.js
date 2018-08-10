@@ -14,6 +14,9 @@ import Tags from "./components/Tags";
 import AllStores from "./components/AllStores";
 import AddStore from "./containers/AddStore";
 import EditStore from "./containers/EditStore";
+
+import SendEmail from "./components/Reset/SendEmail";
+import ResetPass from "./components/Reset/ResetPass";
 import "./App.css";
 
 class App extends Component {
@@ -37,6 +40,8 @@ class App extends Component {
             <PrivateRoute exact path="/add" component={AddStore} />
             <Route exact path="/stores/:id/edit" component={EditStore} />
             <Route exact path="/stores" component={AllStores} />
+            <Route path="/forgot_password" exact component={SendEmail} />
+            <Route path="/reset_password/:token" exact component={ResetPass} />
             {/* <Route exact path="/not-found" component={NotFound} /> */}
           </Switch>
         </div>

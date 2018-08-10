@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-const users = require("./routes/api/users");
+const users = require("./routes/users");
 // const profile = require("./routes/api/profile");
-const stores = require("./routes/api/stores");
+const stores = require("./routes/stores");
 
 const app = express();
 

@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
-const { normalizeErrors } = require("../../utils/helpers");
-const { auth } = require("./../../middleware/auth");
+const { normalizeErrors } = require("./../utils/helpers");
+const { auth } = require("./../middleware/index");
 
-const Store = require("./../../models/Store");
+const Store = require("./../models/Store");
 
 // @route   GET api/stores/
 // @desc    Get all stores

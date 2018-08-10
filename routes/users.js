@@ -2,18 +2,20 @@ const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
-const keys = require("./../../config/keys");
-const { normalizeErrors } = require("../../utils/helpers");
+const moment = require("moment");
+const keys = require("./../config/keys");
+const { normalizeErrors } = require("./../utils/helpers");
 
 //Load User Model
-const User = require("../../models/User");
+const User = require("./../models/User");
 
-const { auth } = require("./../../middleware/auth");
+const { auth, confirmedPasswords } = require("./../middleware/index");
+const { sendEmail } = require("./../utils/mail/index");
 
 // @route   GET api/users/register
 // @desc    Register User
 // @access  Public
-router.post("/register", (req, res) => {
+router.post("/register", confirmedPasswords, (req, res) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       const avatar = gravatar.url(req.body.email, {
@@ -109,6 +111,56 @@ router.get("/auth", auth, (req, res) => {
     avatar: req.user.avatar,
     id: req.user._id
   });
+});
+
+// ROUTE /api/users/forgot_password
+// Generate reset token on User model and email it to user
+router.post("/forgot_password", (req, res) => {
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if (!user) {
+        return res.json({ success: true, email: false });
+      }
+      user.generateResetToken((err, user) => {
+        if (err) return res.status(422).json({ errors: normalizeErrors(err) });
+        sendEmail(user.email, user.name, "reset_password", user);
+        return res.json({ success: true });
+      });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
+// ROUTE /api/users/reset_password
+router.post("/reset_password", confirmedPasswords, (req, res) => {
+  const now = moment().valueOf();
+
+  User.findOne({
+    resetToken: req.body.resetToken,
+    resetTokenExp: {
+      $gte: now
+    }
+  })
+    .then(user => {
+      if (!user) {
+        res.status(422).json({
+          errors: [
+            {
+              detail: "Password Reset is invalid or has expired"
+            }
+          ]
+        });
+        return;
+      }
+      user.password = req.body.password;
+      user.resetToken = "";
+      user.resetTokenExp = "";
+      user.save().then(() => {
+        return res.status(200).json({
+          success: true
+        });
+      });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
 module.exports = router;

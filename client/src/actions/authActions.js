@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { AUTH_USER, LOGOUT_USER, UPDATE_PROFILE } from "./types";
+import { AUTH_USER, LOGOUT_USER } from "./types";
 
 //Register User
 export const registerUser = userData => {
@@ -48,11 +48,11 @@ export const logoutUser = () => dispatch => {
     .catch(err => {});
 };
 
-export const updateProfile = profileData => dispatch => {
+export const updateProfile = profileData => {
   return axios
     .post("/api/users/update_profile", profileData)
     .then(({ data }) => {
-      // return axios;
+      return "Done";
     })
     .catch(err => {
       return Promise.reject(err.response.data.errors);

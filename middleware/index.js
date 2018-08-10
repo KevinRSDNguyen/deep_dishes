@@ -15,4 +15,13 @@ let auth = (req, res, next) => {
   });
 };
 
-module.exports = { auth };
+let confirmedPasswords = (req, res, next) => {
+  if (req.body.password !== req.body.passwordConfirm) {
+    return res.status(400).json({
+      errors: [{ detail: "Passwords do not match!" }]
+    });
+  }
+  next();
+};
+
+module.exports = { auth, confirmedPasswords };

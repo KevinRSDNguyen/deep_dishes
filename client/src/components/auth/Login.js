@@ -58,7 +58,19 @@ class Login extends Component {
                   onChange={this.onChange}
                   required
                 />
-                <input type="submit" className="btn btn-info btn-block mt-4" />
+                <button
+                  className="btn btn-warning btn-block d-block"
+                  onClick={this.submitForm}
+                >
+                  Log in
+                </button>
+                <button
+                  className="btn btn-warning btn-block d-block"
+                  type="button"
+                  onClick={() => this.props.history.push("/forgot_password")}
+                >
+                  Forgot my password
+                </button>
               </form>
             </div>
           </div>

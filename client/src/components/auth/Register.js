@@ -10,7 +10,7 @@ class Register extends Component {
     name: "",
     email: "",
     password: "",
-    password2: ""
+    passwordConfirm: ""
   };
   onChange = e => {
     this.setState({
@@ -23,12 +23,8 @@ class Register extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2
+      passwordConfirm: this.state.passwordConfirm
     };
-
-    if (newUser.password !== newUser.password2) {
-      return toast.error("Passwords must match.");
-    }
 
     registerUser(newUser)
       .then(response => {
@@ -86,8 +82,8 @@ class Register extends Component {
                 <TextFieldGroup
                   type="password"
                   placeholder="Confirm Password"
-                  name="password2"
-                  value={this.state.password2}
+                  name="passwordConfirm"
+                  value={this.state.passwordConfirm}
                   onChange={this.onChange}
                   required
                 />
