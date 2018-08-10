@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { loginUser } from "./../../actions/authActions";
+import { withRouter, Redirect } from "react-router-dom";
+import { loginUser, auth } from "./../../actions/authActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
 
 class Login extends Component {
@@ -17,22 +17,26 @@ class Login extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    this.props.loginUser(this.state).catch(e => {
-      toast.error(e[0].detail);
-    });
+    loginUser(this.state)
+      .then(() => {
+        this.props.auth();
+      })
+      .catch(e => {
+        toast.error(e[0].detail);
+      });
   };
   render() {
-    let authRedirect = this.props.auth.isAuthenticated ? (
+    const redirectOnLogin = this.props.user.userData.isAuth ? (
       <Redirect to="/stores" />
     ) : null;
 
     return (
       <div className="login">
         <ToastContainer />
+        {redirectOnLogin}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              {authRedirect}
               <h1 className="display-4 text-center">Log In</h1>
               <p className="lead text-center">
                 Sign in to your Deep Dishes account
@@ -66,11 +70,13 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth
+    user: state.user
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { loginUser }
-)(Login);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { auth }
+  )(Login)
+);

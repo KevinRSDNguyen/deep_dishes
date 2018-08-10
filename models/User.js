@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { SECRET } = require("./../config/keys");
 
 const UserSchema = new Schema({
   name: {
     type: String,
     required: "name is required",
     minlength: [4, "Too short, min is 4 characters"],
-    maxlength: [32, "Too long, max is 32 characters"]
+    maxlength: [32, "Too long, max name is 32 characters"]
   },
   email: {
     type: String,
@@ -22,7 +24,7 @@ const UserSchema = new Schema({
     type: String,
     required: "password is required",
     minlength: [4, "Too short, min is 4 characters"],
-    maxlength: [32, "Too long, max is 32 characters"]
+    maxlength: [512, "Too long, max pass is 512 characters"]
   },
   avatar: {
     type: String
@@ -30,6 +32,15 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  token: {
+    type: String
+  },
+  resetToken: {
+    type: String
+  },
+  resetTokenExp: {
+    type: Number
   }
 });
 
@@ -56,6 +67,30 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
+  });
+};
+
+UserSchema.methods.generateToken = function(cb) {
+  var user = this;
+  var token = jwt.sign(user._id.toHexString(), SECRET);
+
+  user.token = token;
+  user.save(function(err, user) {
+    if (err) return cb(err);
+    cb(null, user);
+  });
+};
+
+UserSchema.statics.findByToken = function(token, cb) {
+  var user = this;
+
+  jwt.verify(token, SECRET, function(err, decode) {
+    user
+      .findOne({ _id: decode, token: token })
+      .then(user => {
+        return cb(null, user);
+      })
+      .catch(err => cb(err));
   });
 };
 

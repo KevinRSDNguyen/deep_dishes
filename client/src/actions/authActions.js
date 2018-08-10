@@ -1,8 +1,6 @@
 import axios from "axios";
-import setAuthToken from "./../utility/setAuthToken";
-import jwt_decode from "jwt-decode";
 
-import { SET_CURRENT_USER } from "./types";
+import { AUTH_USER, LOGOUT_USER, UPDATE_PROFILE } from "./types";
 
 //Register User
 export const registerUser = userData => {
@@ -16,39 +14,47 @@ export const registerUser = userData => {
     });
 };
 
-//Login - Get User Token
-export const loginUser = userData => dispatch => {
+export const loginUser = dataToSubmit => {
   return axios
-    .post("/api/users/login", userData)
-    .then(({ data: { token } }) => {
-      //Set token to local storage
-      localStorage.setItem("jwtToken", token);
-      //Set token to auth header
-      setAuthToken(token);
-      //Decode token to get user data
-      const decoded = jwt_decode(token);
-      //Set current User
-      dispatch(setCurrentUser(decoded));
-      return "Done";
+    .post(`/api/users/login`, dataToSubmit)
+    .then(({ data }) => {
+      return data;
     })
     .catch(err => {
       return Promise.reject(err.response.data.errors);
     });
 };
 
-//Set Logged in user
-export const setCurrentUser = decoded => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: decoded
-  };
+export const auth = () => dispatch => {
+  axios
+    .get(`/api/users/auth`)
+    .then(response => {
+      dispatch({
+        type: AUTH_USER,
+        payload: response.data
+      });
+    })
+    .catch(err => {});
 };
 
 export const logoutUser = () => dispatch => {
-  //Remove token from local storage
-  localStorage.removeItem("jwtToken");
-  //Remove Auth header for future requests
-  setAuthToken(false);
-  // Set current user to {} which will set isAuthenticated to false
-  dispatch(setCurrentUser({}));
+  axios
+    .get(`/api/users/logout`)
+    .then(response =>
+      dispatch({
+        type: LOGOUT_USER
+      })
+    )
+    .catch(err => {});
+};
+
+export const updateProfile = profileData => dispatch => {
+  return axios
+    .post("/api/users/update_profile", profileData)
+    .then(({ data }) => {
+      // return axios;
+    })
+    .catch(err => {
+      return Promise.reject(err.response.data.errors);
+    });
 };

@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
 import { registerUser } from "./../../actions/authActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
+import { Redirect } from "react-router-dom";
 
 class Register extends Component {
   state = {
@@ -11,11 +12,6 @@ class Register extends Component {
     password: "",
     password2: ""
   };
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/stores");
-    }
-  }
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -48,9 +44,13 @@ class Register extends Component {
       });
   };
   render() {
+    const redirectOnLogin = this.props.user.userData.isAuth ? (
+      <Redirect to="/stores" />
+    ) : null;
     return (
       <div className="register">
         <ToastContainer />
+        {redirectOnLogin}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -106,8 +106,7 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth,
-    errors: state.errors
+    user: state.user
   };
 };
 

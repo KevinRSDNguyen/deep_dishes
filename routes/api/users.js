@@ -3,18 +3,12 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const keys = require("./../../config/keys");
-const passport = require("passport");
 const { normalizeErrors } = require("../../utils/helpers");
 
 //Load User Model
 const User = require("../../models/User");
 
-// @route   GET api/users/test
-// @desc    Tests user route
-// @access  Public
-router.get("/test", (req, res) => {
-  res.json({ msg: "Users works" });
-});
+const { auth } = require("./../../middleware/auth");
 
 // @route   GET api/users/register
 // @desc    Register User
@@ -48,7 +42,6 @@ router.post("/register", (req, res) => {
 // @access  Public
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-
   User.findOne({ email })
     .then(user => {
       //Check for User
@@ -57,7 +50,6 @@ router.post("/login", (req, res) => {
           errors: [{ detail: "Incorrect Email or Password" }]
         });
       }
-
       //Check password
       user.comparePassword(req.body.password, (err, isMatch) => {
         if (!isMatch)
@@ -65,54 +57,58 @@ router.post("/login", (req, res) => {
             errors: [{ detail: "Incorrect Email or Password" }]
           });
 
-        const { id, name, avatar, email } = user;
-        const payload = { id, name, avatar, email };
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          { expiresIn: 3600 },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: "Bearer " + token
+        user.generateToken((err, user) => {
+          if (err)
+            return res.status(422).json({ errors: normalizeErrors(err) });
+          res
+            .cookie("w_auth", user.token)
+            .status(200)
+            .json({
+              loginSuccess: true
             });
-          }
-        );
+        });
       });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
-// ROUTE /api/users/update_profile
-router.post(
-  "/update_profile",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    User.findOneAndUpdate(
-      { _id: req.user._id },
-      {
-        $set: req.body
-      },
-      { new: true }
-    )
-      .then(doc => {
-        res.send(doc);
-      })
-      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
-  }
-);
+// ROUTE /api/users/logout
+router.get("/logout", auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" })
+    .then(doc => {
+      return res.send({
+        success: true
+      });
+    })
+    .catch(err => {
+      return res.status(422).json({ errors: normalizeErrors(err) });
+    });
+});
 
-// @route   GET api/users/current
-// @desc    Return current user
-// @access  Private
-router.get(
-  "/current",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const { id, name, email } = req.user;
-    res.json({ id, name, email });
-  }
-);
-//The PP midware above will send unauthorized if not authenticated.
+// ROUTE /api/users/update_profile
+router.post("/update_profile", auth, (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $set: req.body
+    },
+    { new: true }
+  )
+    .then(doc => {
+      res.json({ success: true });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
+// ROUTE /api/users/auth
+router.get("/auth", auth, (req, res) => {
+  res.json({
+    isAuth: true,
+    email: req.user.email,
+    name: req.user.name,
+    avatar: req.user.avatar,
+    id: req.user._id
+  });
+});
 
 module.exports = router;

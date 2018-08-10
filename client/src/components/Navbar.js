@@ -9,7 +9,7 @@ class Navbar extends Component {
     this.props.logoutUser();
   };
   render() {
-    const { isAuthenticated, user } = this.props.auth;
+    const { isAuth, avatar, name } = this.props.user.userData;
 
     const authLinks = (
       <React.Fragment>
@@ -17,8 +17,8 @@ class Navbar extends Component {
           <Link to="/profile" className="nav-link">
             <img
               className="rounded-circle"
-              src={user.avatar}
-              alt={user.name}
+              src={avatar}
+              alt={name}
               style={{ width: "25px", marginRight: "5px" }}
             />
           </Link>
@@ -88,7 +88,7 @@ class Navbar extends Component {
           </ul>
 
           <ul className="navbar-nav ml-auto">
-            {isAuthenticated ? authLinks : guestLinks}
+            {isAuth ? authLinks : guestLinks}
           </ul>
         </div>
       </nav>
@@ -98,7 +98,7 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth
+    user: state.user
   };
 };
 

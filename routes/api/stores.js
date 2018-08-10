@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const { normalizeErrors } = require("../../utils/helpers");
+const { auth } = require("./../../middleware/auth");
 
 const Store = require("./../../models/Store");
 
@@ -20,20 +21,15 @@ router.get("/", (req, res) => {
 // @route   POST api/stores/add
 // @desc    Add store
 // @access  Private
-router.post(
-  "/add",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    console.log(req.body);
-    const newStore = new Store(req.body);
-    newStore
-      .save()
-      .then(store => {
-        res.json(store);
-      })
-      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
-  }
-);
+router.post("/add", auth, (req, res) => {
+  const newStore = new Store(req.body);
+  newStore
+    .save()
+    .then(store => {
+      res.json(store);
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
 
 // @route   GET api/stores/:id/
 // @desc    Get a store by id
