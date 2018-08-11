@@ -43,6 +43,10 @@ const UserSchema = new Schema({
   },
   resetTokenExp: {
     type: Number
+  },
+  hearts: {
+    type: [{ type: mongoose.Schema.ObjectId, ref: "Store" }],
+    default: []
   }
 });
 

@@ -132,4 +132,48 @@ router.get("/search", (req, res) => {
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
+// @route   GET api/stores/near?lat=43&lng=-179
+// @desc    Get stores near
+// @access  Public
+router.get("/near", (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const q = {
+    location: {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates
+        },
+        $maxDistance: 10000 // 10km
+      }
+    }
+  };
+  Store.find(q)
+    .select("slug name description location") //Only fields we want
+    .limit(100)
+    .then(stores => {
+      res.json(stores);
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
+// @route   POST api/stores/:id/heart
+// @desc    Heart or Unheart a store
+// @access  Private
+router.post("/:id/heart", auth, (req, res) => {
+  const hearts = req.user.hearts.map(obj => {
+    return obj.toString();
+  });
+  const operator = hearts.includes(req.params.id) ? "$pull" : "$addToSet";
+  User.findByIdAndUpdate(
+    req.user._id,
+    { [operator]: { hearts: req.params.id } }, //use [] for js vars in mongo query
+    { new: true } //return updated user
+  )
+    .then(user => {
+      res.json({ success: true });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
 module.exports = router;

@@ -52,6 +52,8 @@ storeSchema.index({
   description: "text"
 });
 
+storeSchema.index({ location: "2dsphere" });
+
 storeSchema.pre("save", function(next) {
   if (!this.isModified("name")) {
     //so slug is only changed if name was changed b4 save

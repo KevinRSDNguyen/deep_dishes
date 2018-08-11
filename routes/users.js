@@ -109,7 +109,8 @@ router.get("/auth", auth, (req, res) => {
     email: req.user.email,
     name: req.user.name,
     avatar: req.user.avatar,
-    id: req.user._id
+    id: req.user._id,
+    hearts: req.user.hearts
   });
 });
 

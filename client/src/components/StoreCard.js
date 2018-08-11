@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { heartStore } from "./../actions/userActions";
+import { auth } from "./../actions/authActions";
+import classnames from "classnames";
 import { Link } from "react-router-dom";
 import placeHolderImg from "./../assets/images/store.jpg";
 
@@ -9,6 +12,11 @@ class StoreCard extends Component {
   };
   onImgError = () => {
     this.setState({ imgError: true });
+  };
+  onHeartClick = id => {
+    heartStore(id)
+      .then(() => this.props.auth())
+      .catch(e => {});
   };
   render() {
     // Display placeholder img if invalid link
@@ -27,7 +35,10 @@ class StoreCard extends Component {
         alt=""
       />
     );
-
+    // const heartClass = classnames("fas fa-heart", {
+    //   "text-danger": this.props.user.userData.hearts.includes(this.props._id)
+    // });
+    const { isAuth, hearts, id } = this.props.user.userData;
     return (
       <div className="col-md-3">
         <div className="card">
@@ -44,12 +55,25 @@ class StoreCard extends Component {
                 .slice(0, 25)
                 .join(" ")}
             </li>
-            {this.props.author === this.props.user.userData.id ? (
+            {isAuth ? (
               <li className="list-group-item">
-                <button>
-                  <Link to={`/stores/${this.props._id}/edit`}>
-                    <i className="far fa-edit" /> Edit
-                  </Link>
+                {this.props.author === id ? (
+                  <button>
+                    <Link to={`/stores/${this.props._id}/edit`}>
+                      <i className="far fa-edit" /> Edit
+                    </Link>
+                  </button>
+                ) : null}
+                <button
+                  onClick={() => this.onHeartClick(this.props._id)}
+                  type="button"
+                  className="btn btn-light mr-1"
+                >
+                  <i
+                    className={classnames("fas fa-heart", {
+                      "text-danger": hearts.includes(this.props._id)
+                    })}
+                  />
                 </button>
               </li>
             ) : null}
@@ -66,4 +90,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(StoreCard);
+export default connect(
+  mapStateToProps,
+  { auth }
+)(StoreCard);
