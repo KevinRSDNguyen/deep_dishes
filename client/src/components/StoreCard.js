@@ -29,49 +29,47 @@ class StoreCard extends Component {
       />
     ) : (
       <img
-        src={this.props.photo || placeHolderImg}
+        src={this.props.storeData.photo || placeHolderImg}
         className="card-img-top"
         onError={this.onImgError}
         alt=""
       />
     );
-    // const heartClass = classnames("fas fa-heart", {
-    //   "text-danger": this.props.user.userData.hearts.includes(this.props._id)
-    // });
-    const { isAuth, hearts, id } = this.props.user.userData;
+    const { userData } = this.props.user;
+    const { storeData } = this.props;
     return (
       <div className="col-md-3">
         <div className="card">
           {img}
           <div className="card-body">
             <h2>
-              <Link to={`/store/${this.props.slug}`}>{this.props.name}</Link>
+              <Link to={`/store/${storeData.slug}`}>{storeData.name}</Link>
             </h2>
           </div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
-              {this.props.description
+              {storeData.description
                 .split(" ")
                 .slice(0, 25)
                 .join(" ")}
             </li>
-            {isAuth ? (
+            {userData.isAuth ? (
               <li className="list-group-item">
-                {this.props.author === id ? (
+                {storeData.author === userData.id ? (
                   <button>
-                    <Link to={`/stores/${this.props._id}/edit`}>
+                    <Link to={`/stores/${storeData._id}/edit`}>
                       <i className="far fa-edit" /> Edit
                     </Link>
                   </button>
                 ) : null}
                 <button
-                  onClick={() => this.onHeartClick(this.props._id)}
+                  onClick={() => this.onHeartClick(storeData._id)}
                   type="button"
                   className="btn btn-light mr-1"
                 >
                   <i
                     className={classnames("fas fa-heart", {
-                      "text-danger": hearts.includes(this.props._id)
+                      "text-danger": userData.hearts.includes(storeData._id)
                     })}
                   />
                 </button>
