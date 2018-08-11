@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import placeHolderImg from "./../assets/images/store.jpg";
 
@@ -43,13 +44,15 @@ class StoreCard extends Component {
                 .slice(0, 25)
                 .join(" ")}
             </li>
-            <li className="list-group-item">
-              <button>
-                <Link to={`/stores/${this.props._id}/edit`}>
-                  <i className="far fa-edit" /> Edit
-                </Link>
-              </button>
-            </li>
+            {this.props.author === this.props.user.userData.id ? (
+              <li className="list-group-item">
+                <button>
+                  <Link to={`/stores/${this.props._id}/edit`}>
+                    <i className="far fa-edit" /> Edit
+                  </Link>
+                </button>
+              </li>
+            ) : null}
           </ul>
         </div>
       </div>
@@ -57,4 +60,10 @@ class StoreCard extends Component {
   }
 }
 
-export default StoreCard;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps)(StoreCard);

@@ -40,6 +40,7 @@ class Profile extends Component {
           />
           <TextFieldGroup
             type="email"
+            label="Email"
             name="email"
             value={this.state.email}
             onChange={this.onChange}

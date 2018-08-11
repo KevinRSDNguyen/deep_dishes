@@ -18,6 +18,11 @@ const storeSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: "You must supply an author"
+  },
   tags: [String],
   created: {
     type: Date,
@@ -39,6 +44,12 @@ const storeSchema = new mongoose.Schema({
       required: "You must supply an address!"
     }
   }
+});
+
+//Define our indexes for faster lookup
+storeSchema.index({
+  name: "text",
+  description: "text"
 });
 
 storeSchema.pre("save", function(next) {

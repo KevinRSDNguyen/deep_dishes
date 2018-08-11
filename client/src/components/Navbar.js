@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import StoreSearchInput from "./search/StoreSearchInput";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "./../actions/authActions";
@@ -59,7 +60,7 @@ class Navbar extends Component {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link className="nav-link" to="/stores">
                 <i className="fas fa-store" /> Stores
@@ -86,6 +87,8 @@ class Navbar extends Component {
               </a>
             </li>
           </ul>
+
+          <StoreSearchInput />
 
           <ul className="navbar-nav ml-auto">
             {isAuth ? authLinks : guestLinks}

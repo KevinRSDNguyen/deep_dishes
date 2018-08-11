@@ -34,5 +34,11 @@ module.exports = {
     } else {
       cb("Error: Images Only!"); //will be err for upload()
     }
+  },
+  confirmOwner: function(store, user) {
+    if (!store.author.equals(user._id)) {
+      return false;
+    }
+    return true;
   }
 };

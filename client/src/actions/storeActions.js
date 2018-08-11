@@ -46,6 +46,25 @@ export const getStoresByTag = tag => dispatch => {
     });
 };
 
+export const getStoresBySearch = searchTerm => dispatch => {
+  dispatch({ type: CLEAR_STORE });
+  dispatch(setStoreLoading());
+  axios
+    .get(`/api/stores/search?q=${searchTerm}`)
+    .then(({ data }) => {
+      dispatch({
+        type: GET_STORES,
+        payload: data
+      });
+    })
+    .catch(({ response }) => {
+      dispatch({
+        type: GET_STORES,
+        payload: []
+      });
+    });
+};
+
 export const getStore = id => dispatch => {
   dispatch({ type: CLEAR_STORE });
   dispatch(setStoreLoading());

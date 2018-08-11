@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const FakeDb = require("./fake-db");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -26,7 +27,8 @@ mongoose
     { useNewUrlParser: true }
   )
   .then(() => {
-    console.log("MongoDB connected!");
+    const fakeDb = new FakeDb();
+    // fakeDb.seedDb();
   })
   .catch(err => {
     console.log(err);
