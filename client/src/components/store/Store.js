@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Spinner from "./../common/Spinner/Spinner";
 import { connect } from "react-redux";
 import StoreMap from "./StoreMap";
+import StoreReviewForm from "./StoreReviewForm/StoreReviewForm";
+import StoreReviewCard from "./StoreReviewCard";
 import { getStoreBySlug } from "./../../actions/storeActions";
 import placeHolderImg from "./../../assets/images/store.jpg";
 
@@ -18,6 +20,7 @@ class Store extends Component {
   }
   render() {
     const { store } = this.props.store;
+    const { id } = this.props.user.userData;
     let storeContent = <Spinner />;
 
     if (store) {
@@ -36,6 +39,8 @@ class Store extends Component {
           alt=""
         />
       );
+      const reviewAuthorIds = store.reviews.map(review => review.author._id);
+      const showReviewForm = !reviewAuthorIds.includes(id);
       const tags = store.tags.map(tag => {
         return (
           <span key={tag}>
@@ -58,6 +63,18 @@ class Store extends Component {
           <p>{store.location.address}</p>
           <p>{store.description}</p>
           {tags}
+          {showReviewForm ? (
+            <StoreReviewForm
+              store={store}
+              getStoreBySlug={() =>
+                this.props.getStoreBySlug(this.props.match.params.slug)
+              }
+            />
+          ) : null}
+
+          {store.reviews.map(r => {
+            return <StoreReviewCard review={r} key={r._id} />;
+          })}
         </div>
       );
     }
@@ -67,7 +84,8 @@ class Store extends Component {
 
 const mapStateToProps = state => {
   return {
-    store: state.store
+    store: state.store,
+    user: state.user
   };
 };
 

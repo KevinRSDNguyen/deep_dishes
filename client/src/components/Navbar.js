@@ -10,11 +10,20 @@ class Navbar extends Component {
     this.props.logoutUser();
   };
   render() {
-    const { isAuth, avatar, name } = this.props.user.userData;
+    const { isAuth, avatar, name, hearts } = this.props.user.userData;
 
     const authLinks = (
       <React.Fragment>
-        <li className="nav-item">
+        <li className="nav-item mx-1">
+          <Link
+            to="/hearts"
+            className="nav-link d-flex flex-column align-items-center"
+          >
+            <i className="far fa-heart" />
+            {hearts && <span>{hearts.length}</span>}
+          </Link>
+        </li>
+        <li className="nav-item mx-1">
           <Link to="/profile" className="nav-link">
             <img
               className="rounded-circle"
@@ -55,7 +64,10 @@ class Navbar extends Component {
           className="navbar-toggler"
           type="button"
           data-toggle="collapse"
-          data-target="navbarNav"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon" />
         </button>

@@ -6,6 +6,7 @@ const { normalizeErrors, confirmOwner } = require("./../utils/helpers");
 const { auth } = require("./../middleware/index");
 
 const Store = require("./../models/Store");
+const Review = require("./../models/Review");
 
 // @route   GET api/stores/
 // @desc    Get all stores
@@ -51,6 +52,7 @@ router.get("/id/:id", (req, res) => {
 router.get("/slug/:slug", (req, res) => {
   Store.findOne({ slug: req.params.slug })
     .populate("author", "_id name email")
+    .populate("reviews")
     .exec()
     .then(store => {
       res.json(store);
@@ -171,6 +173,33 @@ router.post("/:id/heart", auth, (req, res) => {
     { new: true } //return updated user
   )
     .then(user => {
+      res.json({ success: true });
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
+// @route   POST api/stores/hearts
+// @desc    Return stores that User has hearted
+// @access  Private
+router.get("/hearts", auth, (req, res) => {
+  Store.find({
+    _id: { $in: req.user.hearts }
+  })
+    .then(stores => {
+      res.json(stores);
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
+// @route   POST api/stores/add_review/id
+// @desc    Add review to a store
+router.post("/add_review/:id", auth, (req, res) => {
+  req.body.author = req.user._id;
+  req.body.store = req.params.id;
+  const newReview = new Review(req.body);
+  newReview
+    .save()
+    .then(() => {
       res.json({ success: true });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));

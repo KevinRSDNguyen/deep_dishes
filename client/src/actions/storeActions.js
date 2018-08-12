@@ -46,6 +46,25 @@ export const getStoresByTag = tag => dispatch => {
     });
 };
 
+export const getStoresByHearts = () => dispatch => {
+  dispatch({ type: CLEAR_STORE });
+  dispatch(setStoreLoading());
+  axios
+    .get(`/api/stores/hearts`)
+    .then(({ data }) => {
+      dispatch({
+        type: GET_STORES,
+        payload: data
+      });
+    })
+    .catch(({ response }) => {
+      dispatch({
+        type: GET_STORES,
+        payload: []
+      });
+    });
+};
+
 export const getStoresBySearch = searchTerm => dispatch => {
   dispatch({ type: CLEAR_STORE });
   dispatch(setStoreLoading());
@@ -144,6 +163,17 @@ export const getTags = () => dispatch => {
         type: GET_TAGS,
         payload: []
       });
+    });
+};
+
+export const reviewStore = (id, data) => {
+  return axios
+    .post(`/api/stores/add_review/${id}`, data)
+    .then(response => {
+      return "Done";
+    })
+    .catch(err => {
+      return Promise.reject(err.response.data.errors);
     });
 };
 

@@ -1,50 +1,56 @@
 const mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 const slug = require("slugs"); //Helps make url more friendly
 
-const storeSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: "Please enter a store name", //Will require it and pass this msg.
-    minlength: [4, "Too short, store name must be at least 4 characters."]
-  },
-  slug: String, // Auto generated whenever someone saves
-  description: {
-    type: String,
-    trim: true
-  },
-  photo: {
-    type: String,
-    trim: true
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: "You must supply an author"
-  },
-  tags: [String],
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  location: {
-    type: {
+const storeSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
-      default: "Point"
+      trim: true,
+      required: "Please enter a store name", //Will require it and pass this msg.
+      minlength: [4, "Too short, store name must be at least 4 characters."]
     },
-    coordinates: [
-      {
-        type: Number,
-        required: "You must supply coordinates"
-      }
-    ],
-    address: {
+    slug: String, // Auto generated whenever someone saves
+    description: {
       type: String,
-      required: "You must supply an address!"
+      trim: true
+    },
+    photo: {
+      type: String,
+      trim: true
+    },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: "You must supply an author"
+    },
+    tags: [String],
+    created: {
+      type: Date,
+      default: Date.now
+    },
+    location: {
+      type: {
+        type: String,
+        default: "Point"
+      },
+      coordinates: [
+        {
+          type: Number,
+          required: "You must supply coordinates"
+        }
+      ],
+      address: {
+        type: String,
+        required: "You must supply an address!"
+      }
     }
+  },
+  {
+    toJSON: { virtuals: true }, //virtuals by def do not show up when sent off in a document converted to json
+    toObject: { virtuals: true }
   }
-});
+);
 
 //Define our indexes for faster lookup
 storeSchema.index({
@@ -78,5 +84,14 @@ storeSchema.statics.getTagsList = function() {
     { $sort: { count: -1 } } //sort by count descending
   ]);
 };
+
+//Find reviews where stores _id  === reviews store
+//We are not creating a relationship between the two. Its all virtual. Think
+//of join in SQL
+storeSchema.virtual("reviews", {
+  ref: "Review", //What model to link?
+  localField: "_id", //which field on the store matches with review?
+  foreignField: "store" //which field on the review matches with store?
+});
 
 module.exports = mongoose.model("Store", storeSchema);
