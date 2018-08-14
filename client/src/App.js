@@ -16,6 +16,7 @@ import AddStore from "./containers/AddStore";
 import EditStore from "./containers/EditStore";
 import StoreSearchListing from "./components/search/StoreSearchListing";
 import HeartedStores from "./components/stores/HeartedStores";
+import TopStores from "./components/stores/TopStores/TopStores";
 
 import SendEmail from "./components/Reset/SendEmail";
 import ResetPass from "./components/Reset/ResetPass";
@@ -37,6 +38,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/hearts" component={HeartedStores} />
+            <Route exact path="/top" component={TopStores} />
             <Route exact path="/tags" component={Tags} />
             <Route exact path="/tags/:tag" component={Tags} />
             <Route exact path="/store/:slug" component={Store} />

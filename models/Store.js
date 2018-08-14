@@ -85,6 +85,32 @@ storeSchema.statics.getTagsList = function() {
   ]);
 };
 
+storeSchema.statics.getTopStores = function() {
+  return this.aggregate([
+    //cannot use mongoose virtual, since aggregate is for lower level mongodb
+    // Lookup Stores and populate their reviews
+    {
+      $lookup: {
+        from: "reviews", //Look up Model Name Review after it has been lowercased and pluralized
+        localField: "_id",
+        foreignField: "store",
+        as: "reviews"
+      }
+    },
+    // filter for only items that have 2 or more reviews
+    { $match: { "reviews.1": { $exists: true } } }, //1st index in array exists. This is mongo db code not js
+    // Add the average reviews field
+    {
+      $addFields: {
+        averageRating: { $avg: "$reviews.rating" } //$ means pipe it in from our match
+      }
+    },
+    // sort it by our new field, highest reviews first
+    { $sort: { averageRating: -1 } },
+    { $limit: 10 }
+  ]);
+};
+
 //Find reviews where stores _id  === reviews store
 //We are not creating a relationship between the two. Its all virtual. Think
 //of join in SQL
@@ -93,5 +119,13 @@ storeSchema.virtual("reviews", {
   localField: "_id", //which field on the store matches with review?
   foreignField: "store" //which field on the review matches with store?
 });
+
+function autopopulate(next) {
+  this.populate("reviews"); //From Virtual
+  next();
+}
+
+storeSchema.pre("find", autopopulate); //So whenever i query a store it autopop
+storeSchema.pre("findOne", autopopulate);
 
 module.exports = mongoose.model("Store", storeSchema);

@@ -38,7 +38,7 @@ class StoreCard extends Component {
     const { userData } = this.props.user;
     const { storeData } = this.props;
     return (
-      <div className="col-md-3">
+      <div className="col-md-4 col-lg-3">
         <div className="card">
           {img}
           <div className="card-body">
@@ -53,28 +53,34 @@ class StoreCard extends Component {
                 .slice(0, 25)
                 .join(" ")}
             </li>
-            {userData.isAuth ? (
-              <li className="list-group-item">
-                {storeData.author === userData.id ? (
-                  <button>
-                    <Link to={`/stores/${storeData._id}/edit`}>
-                      <i className="far fa-edit" /> Edit
-                    </Link>
+
+            <li className="list-group-item">
+              {userData.isAuth ? (
+                <React.Fragment>
+                  {storeData.author === userData.id ? (
+                    <button>
+                      <Link to={`/stores/${storeData._id}/edit`}>
+                        <i className="far fa-edit" /> Edit
+                      </Link>
+                    </button>
+                  ) : null}
+                  <button
+                    onClick={() => this.onHeartClick(storeData._id)}
+                    type="button"
+                    className="btn btn-light mr-1"
+                  >
+                    <i
+                      className={classnames("fas fa-heart", {
+                        "text-danger": userData.hearts.includes(storeData._id)
+                      })}
+                    />
                   </button>
-                ) : null}
-                <button
-                  onClick={() => this.onHeartClick(storeData._id)}
-                  type="button"
-                  className="btn btn-light mr-1"
-                >
-                  <i
-                    className={classnames("fas fa-heart", {
-                      "text-danger": userData.hearts.includes(storeData._id)
-                    })}
-                  />
-                </button>
-              </li>
-            ) : null}
+                </React.Fragment>
+              ) : null}
+
+              <i className="far fa-comment-alt" />
+              <span>{storeData.reviews.length}</span>
+            </li>
           </ul>
         </div>
       </div>

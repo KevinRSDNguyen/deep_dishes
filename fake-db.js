@@ -1,5 +1,6 @@
 const Store = require("./models/Store");
 const User = require("./models/User");
+const Review = require("./models/Review");
 
 const fakeDbData = require("./data.json");
 
@@ -8,10 +9,12 @@ class FakeDb {
     this.users = fakeDbData.users;
     this.usersDocs = [];
     this.stores = fakeDbData.stores;
+    this.reviews = fakeDbData.reviews;
   }
   async cleanDb() {
     await User.remove({});
     await Store.remove({});
+    await Review.remove({});
     return "Finished";
   }
   pushDataToDb() {
@@ -27,6 +30,11 @@ class FakeDb {
         Math.floor(Math.random() * Math.floor(this.usersDocs.length))
       ];
       newStore.save();
+    });
+
+    this.reviews.forEach(review => {
+      const newReview = new Review(review);
+      newReview.save();
     });
   }
   seedDb() {

@@ -205,4 +205,14 @@ router.post("/add_review/:id", auth, (req, res) => {
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
 
+// @route   GET api/stores/top
+// @desc    Add review to a store
+router.get("/top", (req, res) => {
+  Store.getTopStores()
+    .then(stores => {
+      res.json(stores);
+    })
+    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+});
+
 module.exports = router;
