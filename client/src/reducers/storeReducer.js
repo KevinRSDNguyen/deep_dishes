@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
     case GET_STORES:
       return {
         ...state,
-        stores: action.payload,
+        ...action.payload,
         loading: false
       };
     case CLEAR_STORE:

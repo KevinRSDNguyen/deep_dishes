@@ -38,7 +38,7 @@ class StoreCard extends Component {
     const { userData } = this.props.user;
     const { storeData } = this.props;
     return (
-      <div className="col-md-4 col-lg-3">
+      <div className="col-sm-6 col-md-4 col-lg-3">
         <div className="card">
           {img}
           <div className="card-body">

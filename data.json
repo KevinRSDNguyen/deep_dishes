@@ -229,7 +229,7 @@
     {
       "_id": "58c039018060197ca0b52d4c",
       "email": "wes@example.com",
-      "name": "Wes Bos",
+      "name": "Wesley Bin",
       "hearts": ["58c039938060197ca0b52d4d", "58c03a428060197ca0b52d4f"],
       "password": "testtest",
       "avatar": "http://www.gravatar.com/avatar/b642b4217b34b1e8d3bd915fc65c4452?s=200&r=pg&d=mm"
@@ -246,6 +246,13 @@
       "_id": "58c08bbed1d97c276fd56ce3",
       "email": "beau@example.com",
       "name": "Beau",
+      "hearts": [],
+      "password": "testtest",
+      "avatar": "http://www.gravatar.com/avatar/b642b4217b34b1e8d3bd915fc65c4452?s=200&r=pg&d=mm"
+    },
+    {
+      "email": "test@test.com",
+      "name": "test",
       "hearts": [],
       "password": "testtest",
       "avatar": "http://www.gravatar.com/avatar/b642b4217b34b1e8d3bd915fc65c4452?s=200&r=pg&d=mm"

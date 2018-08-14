@@ -8,11 +8,12 @@ import {
   GET_TAGS
 } from "./types";
 
-export const getStores = () => dispatch => {
+export const getStores = page => dispatch => {
   dispatch({ type: CLEAR_STORE });
   dispatch(setStoreLoading());
+  let url = page ? `/api/stores/page/${page}` : "/api/stores";
   axios
-    .get(`/api/stores`)
+    .get(url)
     .then(({ data }) => {
       dispatch({
         type: GET_STORES,

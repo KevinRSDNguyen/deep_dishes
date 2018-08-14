@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import classNames from "classnames";
-import Stores from "./Stores";
+import Stores from "./../Stores";
 import { connect } from "react-redux";
-import { getTags, getStores, getStoresByTag } from "./../actions/storeActions";
+import {
+  getTags,
+  getStores,
+  getStoresByTag
+} from "./../../actions/storeActions";
 
 class Tags extends Component {
   componentDidMount() {

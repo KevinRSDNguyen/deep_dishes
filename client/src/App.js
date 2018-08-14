@@ -10,8 +10,8 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/auth/Profile";
 import Store from "./components/store/Store";
-import Tags from "./components/Tags";
-import AllStores from "./components/AllStores";
+import Tags from "./components/stores/TaggedStores";
+import AllStores from "./components/stores/AllStores";
 import AddStore from "./containers/AddStore";
 import EditStore from "./containers/EditStore";
 import StoreSearchListing from "./components/search/StoreSearchListing";
@@ -45,6 +45,7 @@ class App extends Component {
             <PrivateRoute exact path="/add" component={AddStore} />
             <Route exact path="/stores/:id/edit" component={EditStore} />
             <Route exact path="/stores" component={AllStores} />
+            <Route exact path="/stores/page/:page" component={AllStores} />
             <Route
               exact
               path="/stores/:searchTerm/search"

@@ -20,7 +20,7 @@ class Store extends Component {
   }
   render() {
     const { store } = this.props.store;
-    const { id } = this.props.user.userData;
+    const { isAuth, id } = this.props.user.userData;
     let storeContent = <Spinner />;
 
     if (store) {
@@ -40,7 +40,7 @@ class Store extends Component {
         />
       );
       const reviewAuthorIds = store.reviews.map(review => review.author._id);
-      const showReviewForm = !reviewAuthorIds.includes(id);
+      const showReviewForm = isAuth && !reviewAuthorIds.includes(id);
       const tags = store.tags.map(tag => {
         return (
           <span key={tag}>

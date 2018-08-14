@@ -12,11 +12,59 @@ const Review = require("./../models/Review");
 // @desc    Get all stores
 // @access  Public
 router.get("/", (req, res) => {
-  return Store.find()
-    .then(stores => {
-      res.json(stores);
-    })
-    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  // return Store.find()
+  //   .then(stores => {
+  //     res.json(stores);
+  //   })
+  //   .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  const page = req.params.page || 1;
+  const limit = 12;
+  const skip = page * limit - limit;
+
+  const storesPromise = Store.find() //Find stores for the current page
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: "desc" });
+
+  const countPromise = Store.countDocuments(); //Find total number of stores in db
+
+  Promise.all([storesPromise, countPromise]).then(values => {
+    const [stores, count] = values;
+    const pages = Math.ceil(count / limit);
+    if (!stores.length && skip) {
+      return res
+        .status(422)
+        .json({ errors: [{ detail: "This page does not exist" }] });
+    }
+    // res.json({ stores, page, pages, count: count });
+    res.json({ stores, page, pages, count });
+  });
+});
+
+// @route   GET api/stores/page/:page
+router.get("/page/:page", (req, res) => {
+  const page = req.params.page || 1;
+  const limit = 12;
+  const skip = page * limit - limit;
+
+  const storesPromise = Store.find() //Find stores for the current page
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: "desc" });
+
+  const countPromise = Store.countDocuments(); //Find total number of stores in db
+
+  Promise.all([storesPromise, countPromise]).then(values => {
+    const [stores, count] = values;
+    const pages = Math.ceil(count / limit);
+    if (!stores.length && skip) {
+      return res
+        .status(422)
+        .json({ errors: [{ detail: "This page does not exist" }] });
+    }
+    // res.json({ stores, page, pages, count: count });
+    res.json({ stores, page, pages, count });
+  });
 });
 
 // @route   POST api/stores/add
@@ -102,7 +150,7 @@ router.get("/tags", (req, res) => {
 router.get("/tags/:tag", (req, res) => {
   Store.find({ tags: req.params.tag })
     .then(stores => {
-      res.json(stores);
+      res.json({ stores });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
@@ -129,7 +177,7 @@ router.get("/search", (req, res) => {
     .limit(100)
     .exec()
     .then(stores => {
-      res.json(stores);
+      res.json({ stores });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
@@ -154,7 +202,7 @@ router.get("/near", (req, res) => {
     .select("slug name description location") //Only fields we want
     .limit(100)
     .then(stores => {
-      res.json(stores);
+      res.json({ stores });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
@@ -186,7 +234,7 @@ router.get("/hearts", auth, (req, res) => {
     _id: { $in: req.user.hearts }
   })
     .then(stores => {
-      res.json(stores);
+      res.json({ stores });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
@@ -210,7 +258,7 @@ router.post("/add_review/:id", auth, (req, res) => {
 router.get("/top", (req, res) => {
   Store.getTopStores()
     .then(stores => {
-      res.json(stores);
+      res.json({ stores });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
