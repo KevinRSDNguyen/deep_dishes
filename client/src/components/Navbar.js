@@ -56,7 +56,7 @@ class Navbar extends Component {
       </React.Fragment>
     );
     return (
-      <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <Link className="navbar-brand" to="/">
           Deep Dishes
         </Link>
@@ -88,11 +88,13 @@ class Navbar extends Component {
                 <i className="fas fa-trophy" /> Top
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/add">
-                <i className="far fa-plus-square" /> Add
-              </Link>
-            </li>
+            {isAuth && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/add">
+                  <i className="far fa-plus-square" /> Add
+                </Link>
+              </li>
+            )}
             <li className="nav-item">
               <a className="nav-link" href="">
                 <i className="fas fa-map-marker-alt" /> Map

@@ -18,13 +18,15 @@ class StoreSearchInput extends Component {
   };
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className="form-inline my-2 my-lg-0">
         <input
-          type="text"
+          type="search"
+          className="form-control"
           name="searchValue"
           placeholder="Search for stores"
           value={this.state.searchValue}
           onChange={this.onChange}
+          aria-label="Search"
         />
       </form>
     );
