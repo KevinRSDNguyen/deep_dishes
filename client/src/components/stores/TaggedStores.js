@@ -31,7 +31,7 @@ class Tags extends Component {
     this.props.history.push(`/tags/${_id}`);
   };
   render() {
-    const { tags, stores } = this.props.store;
+    const { tags, stores, loading } = this.props.store;
     const tagParam = this.props.match.params.tag;
     const tagButtons = tags.map(tag => {
       const tagButtonClasses = classNames(
@@ -52,9 +52,11 @@ class Tags extends Component {
 
     return (
       <div>
-        <h2>{tagParam}</h2>
-        {tagButtons}
-        <Stores stores={stores} />
+        <h2 className="text-center my-3">
+          {tagParam ? tagParam : "Please select a tag category"}
+        </h2>
+        <div className="mb-2">{tagButtons}</div>
+        <Stores stores={stores} loading={loading} />
       </div>
     );
   }

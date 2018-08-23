@@ -39,49 +39,45 @@ class StoreCard extends Component {
     const { storeData } = this.props;
     return (
       <div className="col-sm-6 col-md-4 col-lg-3">
-        <div className="card">
+        <div className="card position-relative my-1">
           {img}
           <div className="card-body">
-            <h2>
+            <h4>
               <Link to={`/store/${storeData.slug}`}>{storeData.name}</Link>
-            </h2>
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
+            </h4>
+            <p className="card-text">
               {storeData.description
                 .split(" ")
                 .slice(0, 25)
                 .join(" ")}
-            </li>
-
-            <li className="list-group-item">
-              {userData.isAuth ? (
-                <React.Fragment>
-                  {storeData.author === userData.id ? (
-                    <button>
-                      <Link to={`/stores/${storeData._id}/edit`}>
-                        <i className="far fa-edit" /> Edit
-                      </Link>
-                    </button>
-                  ) : null}
-                  <button
-                    onClick={() => this.onHeartClick(storeData._id)}
-                    type="button"
-                    className="btn btn-light mr-1"
+            </p>
+          </div>
+          <div className="position-absolute d-flex justify-content-around w-100 text-white mt-2">
+            {userData.isAuth ? (
+              <React.Fragment>
+                {storeData.author === userData.id ? (
+                  <Link
+                    to={`/stores/${storeData._id}/edit`}
+                    className="text-white"
+                    style={{ textDecoration: "none" }}
                   >
-                    <i
-                      className={classnames("fas fa-heart", {
-                        "text-danger": userData.hearts.includes(storeData._id)
-                      })}
-                    />
-                  </button>
-                </React.Fragment>
-              ) : null}
-
-              <i className="far fa-comment-alt" />
+                    <i className="far fa-edit" /> Edit
+                  </Link>
+                ) : null}
+                <i
+                  className={classnames("fas fa-heart fa-lg", {
+                    "text-danger": userData.hearts.includes(storeData._id)
+                  })}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => this.onHeartClick(storeData._id)}
+                />
+              </React.Fragment>
+            ) : null}
+            <div>
+              <i className="far fa-comment-alt fa-lg mx-1" />
               <span>{storeData.reviews.length}</span>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </div>
     );

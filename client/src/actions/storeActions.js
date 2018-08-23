@@ -159,7 +159,10 @@ export const editStore = (id, store, history) => dispatch => {
   return axios
     .post(`/api/stores/id/${id}/edit`, store)
     .then(res => {
-      history.push(`/store/${store.slug}`);
+      history.push({
+        pathname: `/store/${store.slug}`,
+        state: { success: true }
+      });
       // this.props.getStore(this.props.match.params.id);
     })
     .catch(err => {

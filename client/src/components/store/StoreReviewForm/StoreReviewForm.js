@@ -45,7 +45,7 @@ class StoreReviewForm extends Component {
       );
     });
     return (
-      <div className="card">
+      <div className="card my-3">
         <ToastContainer />
         <form onSubmit={this.onSubmit}>
           <TextAreaFieldGroup
@@ -55,7 +55,7 @@ class StoreReviewForm extends Component {
             placeholder="Did you try this place? Have something to say? Leave a review.."
             required
           />
-          <div className="d-flex justify-content-around">
+          <div className="d-flex justify-content-around py-2">
             <div className="star-rating">{stars}</div>
             <input
               className="btn btn-warning"

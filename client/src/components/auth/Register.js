@@ -3,7 +3,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
 import { registerUser } from "./../../actions/authActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
-import { Redirect } from "react-router-dom";
 
 class Register extends Component {
   state = {
@@ -40,13 +39,9 @@ class Register extends Component {
       });
   };
   render() {
-    const redirectOnLogin = this.props.user.userData.isAuth ? (
-      <Redirect to="/stores" />
-    ) : null;
     return (
       <div className="register">
         <ToastContainer />
-        {redirectOnLogin}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">

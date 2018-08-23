@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Spinner from "./../common/Spinner/Spinner";
 import { connect } from "react-redux";
@@ -17,6 +18,9 @@ class Store extends Component {
   };
   componentDidMount() {
     this.props.getStoreBySlug(this.props.match.params.slug);
+    if (this.props.location.state && this.props.location.state.success) {
+      toast.success("Store successfully updated!");
+    }
   }
   render() {
     const { store } = this.props.store;
@@ -53,7 +57,7 @@ class Store extends Component {
 
       storeContent = (
         <div>
-          <div className="row">
+          <div className="row my-3">
             <div className="col-md-6">{img}</div>
             <div className="col-md-6">
               <StoreMap location={store.location} />
@@ -78,7 +82,11 @@ class Store extends Component {
         </div>
       );
     }
-    return <div>{storeContent}</div>;
+    return (
+      <div>
+        {storeContent} <ToastContainer />{" "}
+      </div>
+    );
   }
 }
 

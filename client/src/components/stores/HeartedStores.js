@@ -8,11 +8,11 @@ class HeartedStores extends Component {
     this.props.getStoresByHearts();
   }
   render() {
-    const { stores } = this.props.store;
+    const { stores, loading } = this.props.store;
     return (
       <div>
-        <p>Hearted Stores</p>
-        <Stores stores={stores} />
+        <h1 className="text-center my-3">Hearted Stores</h1>
+        <Stores stores={stores} loading={loading} />
       </div>
     );
   }

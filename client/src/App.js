@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { auth } from "./actions/authActions";
 
 import PrivateRoute from "./components/common/PrivateRoute";
+import GuestRoute from "./components/common/GuestRoute";
 import Navbar from "./components/Navbar";
 import Landing from "./components/Landing";
 import Register from "./components/auth/Register";
@@ -33,9 +34,10 @@ class App extends Component {
         {/* <Route exact path="/" component={Stores} /> */}
         <div className="container">
           <Switch>
+            <Route exact path="/" render={() => <Redirect to="/stores" />} />
             <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
+            <GuestRoute exact path="/register" component={Register} />
+            <GuestRoute exact path="/login" component={Login} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/hearts" component={HeartedStores} />
             <Route exact path="/top" component={TopStores} />

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { loginUser, auth } from "./../../actions/authActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
 
@@ -26,14 +26,9 @@ class Login extends Component {
       });
   };
   render() {
-    const redirectOnLogin = this.props.user.userData.isAuth ? (
-      <Redirect to="/stores" />
-    ) : null;
-
     return (
       <div className="login">
         <ToastContainer />
-        {redirectOnLogin}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">

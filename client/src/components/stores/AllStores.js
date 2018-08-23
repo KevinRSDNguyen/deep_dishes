@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import Stores from "./../Stores";
+import Pagination from "./../common/Pagination";
 import { connect } from "react-redux";
 import { getStores } from "./../../actions/storeActions";
 
@@ -17,25 +17,12 @@ class AllStores extends Component {
     }
   }
   render() {
-    const { stores, page, pages, count } = this.props.store;
-    const pagination = (
-      <div>
-        {page > 1 ? (
-          <Link to={`/stores/page/${page - 1}`}>Previous</Link>
-        ) : null}
-        <p>
-          Page {page} of {pages} - {count} total results
-        </p>
-        {page < pages ? (
-          <Link to={`/stores/page/${parseFloat(page) + 1}`}>Next</Link>
-        ) : null}
-      </div>
-    );
+    const { stores, loading, page, pages, count } = this.props.store;
     return (
       <div>
-        <p>All Stores</p>
-        <Stores stores={stores} />
-        {pagination}
+        <h1 className="text-center my-3">All Stores</h1>
+        <Stores stores={stores} loading={loading} />
+        <Pagination page={page} pages={pages} count={count} />
       </div>
     );
   }

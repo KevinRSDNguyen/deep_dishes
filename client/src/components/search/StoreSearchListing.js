@@ -16,24 +16,24 @@ class StoreSearchListing extends Component {
     }
   }
   renderTitle() {
-    const { stores } = this.props.store;
+    const { stores, loading } = this.props.store;
     const { searchTerm } = this.props.match.params;
     let title = "";
 
-    if (stores.length === 0) {
-      title = `No results for "${searchTerm}"`;
+    if (loading) {
+      title = "";
     } else {
       title = `${stores.length} result(s) for "${searchTerm}"`;
     }
 
-    return <h1>{title}</h1>;
+    return <h1 className="my-2">{title}</h1>;
   }
   render() {
-    const { stores } = this.props.store;
+    const { stores, loading } = this.props.store;
     return (
       <div>
         {this.renderTitle()}
-        <Stores stores={stores} />
+        <Stores stores={stores} loading={loading} />
       </div>
     );
   }
