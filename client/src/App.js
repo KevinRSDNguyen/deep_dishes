@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ToastContainer } from "react-toastify";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { auth } from "./actions/authActions";
@@ -31,6 +32,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
+        <ToastContainer />
         {/* <Route exact path="/" component={Stores} /> */}
         <div className="container">
           <Switch>

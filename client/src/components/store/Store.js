@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Spinner from "./../common/Spinner/Spinner";
 import { connect } from "react-redux";
@@ -11,16 +11,12 @@ import placeHolderImg from "./../../assets/images/store.jpg";
 import { AmazonS3Url } from "./../../utility/helpers";
 
 class Store extends Component {
-  state = {
-    imgError: false
-  };
-  onImgError = () => {
-    this.setState({ imgError: true });
-  };
   componentDidMount() {
     this.props.getStoreBySlug(this.props.match.params.slug);
-    if (this.props.location.state && this.props.location.state.success) {
+    if (this.props.location.state && this.props.location.state.edited) {
       toast.success("Store successfully updated!");
+    } else if (this.props.location.state && this.props.location.state.added) {
+      toast.success("Store successfully created!");
     }
   }
   render() {
@@ -29,18 +25,10 @@ class Store extends Component {
     let storeContent = <Spinner />;
 
     if (store) {
-      const img = this.state.imgError ? (
+      const img = (
         <img
-          src={placeHolderImg}
+          src={store.photo ? `${AmazonS3Url}${store.photo}` : placeHolderImg}
           className="img-fluid d-block mx-auto"
-          onError={this.onImgError}
-          alt=""
-        />
-      ) : (
-        <img
-          src={`${AmazonS3Url}${store.photo}` || placeHolderImg}
-          className="img-fluid d-block mx-auto"
-          onError={this.onImgError}
           alt=""
         />
       );
@@ -83,11 +71,7 @@ class Store extends Component {
         </div>
       );
     }
-    return (
-      <div>
-        {storeContent} <ToastContainer />{" "}
-      </div>
-    );
+    return <div>{storeContent}</div>;
   }
 }
 

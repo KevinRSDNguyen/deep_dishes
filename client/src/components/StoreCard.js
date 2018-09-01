@@ -8,12 +8,6 @@ import { AmazonS3Url } from "./../utility/helpers";
 import placeHolderImg from "./../assets/images/store.jpg";
 
 class StoreCard extends Component {
-  state = {
-    imgError: false
-  };
-  onImgError = () => {
-    this.setState({ imgError: true });
-  };
   onHeartClick = id => {
     heartStore(id)
       .then(() => this.props.auth())
@@ -21,18 +15,14 @@ class StoreCard extends Component {
   };
   render() {
     // Display placeholder img if invalid link
-    const img = this.state.imgError ? (
+    const img = (
       <img
-        src={placeHolderImg}
+        src={
+          this.props.storeData.photo
+            ? `${AmazonS3Url}${this.props.storeData.photo}`
+            : placeHolderImg
+        }
         className="card-img-top"
-        onError={this.onImgError}
-        alt=""
-      />
-    ) : (
-      <img
-        src={`${AmazonS3Url}${this.props.storeData.photo}` || placeHolderImg}
-        className="card-img-top"
-        onError={this.onImgError}
         alt=""
       />
     );

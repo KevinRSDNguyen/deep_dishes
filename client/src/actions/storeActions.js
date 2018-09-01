@@ -143,11 +143,11 @@ export const getStoreBySlug = slug => dispatch => {
 };
 
 //Add Store
-export const addStore = (store, history) => dispatch => {
+export const addStore = store => dispatch => {
   return axios
     .post("/api/stores/add", store)
-    .then(response => {
-      history.push("/");
+    .then(({ data }) => {
+      return data;
     })
     .catch(err => {
       return Promise.reject(err.response.data.errors);
@@ -155,14 +155,15 @@ export const addStore = (store, history) => dispatch => {
 };
 
 //Add Store
-export const editStore = (id, store, history) => dispatch => {
+export const editStore = (id, store) => dispatch => {
   return axios
     .post(`/api/stores/id/${id}/edit`, store)
     .then(res => {
-      history.push({
-        pathname: `/store/${store.slug}`,
-        state: { success: true }
-      });
+      // history.push({
+      //   pathname: `/store/${store.slug}`,
+      //   state: { edited: true }
+      // });
+      return "Done";
       // this.props.getStore(this.props.match.params.id);
     })
     .catch(err => {

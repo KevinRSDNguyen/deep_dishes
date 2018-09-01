@@ -9,7 +9,7 @@ const TopStoreRow = ({ store, index }) => {
       <td>
         <Link to={`/store/${store.slug}`}>
           <img
-            src={`${AmazonS3Url}${store.photo}` || placeHolderImg}
+            src={store.photo ? `${AmazonS3Url}${store.photo}` : placeHolderImg}
             alt={store.name}
             style={{ width: "200px" }}
           />

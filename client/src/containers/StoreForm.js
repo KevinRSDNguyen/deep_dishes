@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextFieldGroup from "./../components/common/TextFieldGroup";
 import TextAreaFieldGroup from "./../components/common/TextAreaFieldGroup";
+import FileFieldGroup from "./../components/common/FileFieldGroup";
 import { choices } from "./../utility/tags";
 
 class StoreForm extends Component {
@@ -12,7 +13,8 @@ class StoreForm extends Component {
     slug: this.props.store ? this.props.store.slug : "",
     location: this.props.store
       ? this.props.store.location
-      : { address: "", coordinates: ["", ""] }
+      : { address: "", coordinates: ["", ""] },
+    file: null
   };
   onSubmit = e => {
     e.preventDefault();
@@ -80,6 +82,9 @@ class StoreForm extends Component {
     }
     this.setState({ tags });
   };
+  onFileChange = e => {
+    this.setState({ file: e.target.files[0] });
+  };
   render() {
     const tagChoices = choices.map(choice => {
       return (
@@ -113,11 +118,10 @@ class StoreForm extends Component {
           onChange={this.onChange}
           value={this.state.description}
         />
-        <TextAreaFieldGroup
+        <FileFieldGroup
           label="Photo"
-          name="photo"
-          onChange={this.onChange}
-          value={this.state.photo}
+          onChange={this.onFileChange}
+          accept="image/*"
         />
         {/* address, lng and lat */}
         <TextFieldGroup

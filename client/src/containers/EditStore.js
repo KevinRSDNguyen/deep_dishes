@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { getStore, editStore } from "./../actions/storeActions";
 
@@ -18,7 +18,13 @@ class EditStore extends Component {
 
   onSubmit = store => {
     this.props
-      .editStore(this.props.match.params.id, store, this.props.history)
+      .editStore(this.props.match.params.id, store)
+      .then(() => {
+        this.props.history.push({
+          pathname: `/store/${store.slug}`,
+          state: { edited: true }
+        });
+      })
       .catch(e => {
         toast.error(e[0].detail);
       });
@@ -27,7 +33,6 @@ class EditStore extends Component {
     return (
       <div>
         <h1>Edit Store</h1>
-        <ToastContainer />
         {this.props.store.store ? (
           <StoreForm onSubmit={this.onSubmit} store={this.props.store.store} />
         ) : (

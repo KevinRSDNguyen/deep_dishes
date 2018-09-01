@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TextAreaFieldGroup from "./../../common/TextAreaFieldGroup";
 import { reviewStore } from "./../../../actions/storeActions";
 import "./StoreReviewForm.css";
@@ -46,7 +46,6 @@ class StoreReviewForm extends Component {
     });
     return (
       <div className="card my-3">
-        <ToastContainer />
         <form onSubmit={this.onSubmit}>
           <TextAreaFieldGroup
             name="text"
