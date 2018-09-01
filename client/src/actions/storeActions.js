@@ -143,9 +143,17 @@ export const getStoreBySlug = slug => dispatch => {
 };
 
 //Add Store
-export const addStore = store => dispatch => {
+export const addStore = values => dispatch => {
+  let formData = new FormData();
+  const config = {
+    header: { "content-type": "multipart/form-data" }
+  };
+  for (let key in values) {
+    formData.append(key, JSON.stringify(values[key]));
+  }
+  formData.append("file", values.file);
   return axios
-    .post("/api/stores/add", store)
+    .post("/api/stores/add", formData, config)
     .then(({ data }) => {
       return data;
     })
@@ -159,12 +167,7 @@ export const editStore = (id, store) => dispatch => {
   return axios
     .post(`/api/stores/id/${id}/edit`, store)
     .then(res => {
-      // history.push({
-      //   pathname: `/store/${store.slug}`,
-      //   state: { edited: true }
-      // });
       return "Done";
-      // this.props.getStore(this.props.match.params.id);
     })
     .catch(err => {
       return Promise.reject(err.response.data.errors);

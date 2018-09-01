@@ -15,6 +15,15 @@ let auth = (req, res, next) => {
   });
 };
 
+let jsonParseBody = (req, res, next) => {
+  for (let key in req.body) {
+    if (key !== "file") {
+      req.body[key] = JSON.parse(req.body[key]);
+    }
+  }
+  next();
+};
+
 let confirmedPasswords = (req, res, next) => {
   if (req.body.password !== req.body.passwordConfirm) {
     return res.status(400).json({
@@ -24,4 +33,4 @@ let confirmedPasswords = (req, res, next) => {
   next();
 };
 
-module.exports = { auth, confirmedPasswords };
+module.exports = { auth, confirmedPasswords, jsonParseBody };

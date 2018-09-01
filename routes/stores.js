@@ -2,11 +2,26 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
-const { normalizeErrors, confirmOwner } = require("./../utils/helpers");
-const { auth } = require("./../middleware/index");
+const multer = require("multer");
+const AWS = require("aws-sdk");
+const uuid = require("uuid/v1");
+const {
+  normalizeErrors,
+  confirmOwner,
+  checkFileType
+} = require("./../utils/helpers");
+const { auth, jsonParseBody } = require("./../middleware/index");
 
 const Store = require("./../models/Store");
 const Review = require("./../models/Review");
+
+const uploadService = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10000000 }, //file size limit of 10mb
+  fileFilter: function(req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).single("file");
 
 // @route   GET api/stores/
 // @desc    Get all stores
@@ -70,7 +85,7 @@ router.get("/page/:page", (req, res) => {
 // @route   POST api/stores/add
 // @desc    Add store
 // @access  Private
-router.post("/add", auth, (req, res) => {
+router.post("/add", auth, uploadService, jsonParseBody, (req, res) => {
   req.body.author = req.user._id;
   const newStore = new Store(req.body);
   newStore
