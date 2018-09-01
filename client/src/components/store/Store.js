@@ -8,6 +8,7 @@ import StoreReviewForm from "./StoreReviewForm/StoreReviewForm";
 import StoreReviewCard from "./StoreReviewCard";
 import { getStoreBySlug } from "./../../actions/storeActions";
 import placeHolderImg from "./../../assets/images/store.jpg";
+import { AmazonS3Url } from "./../../utility/helpers";
 
 class Store extends Component {
   state = {
@@ -37,7 +38,7 @@ class Store extends Component {
         />
       ) : (
         <img
-          src={store.photo || placeHolderImg}
+          src={`${AmazonS3Url}${store.photo}` || placeHolderImg}
           className="img-fluid d-block mx-auto"
           onError={this.onImgError}
           alt=""

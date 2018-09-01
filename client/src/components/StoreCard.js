@@ -4,6 +4,7 @@ import { heartStore } from "./../actions/userActions";
 import { auth } from "./../actions/authActions";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
+import { AmazonS3Url } from "./../utility/helpers";
 import placeHolderImg from "./../assets/images/store.jpg";
 
 class StoreCard extends Component {
@@ -29,7 +30,7 @@ class StoreCard extends Component {
       />
     ) : (
       <img
-        src={this.props.storeData.photo || placeHolderImg}
+        src={`${AmazonS3Url}${this.props.storeData.photo}` || placeHolderImg}
         className="card-img-top"
         onError={this.onImgError}
         alt=""
@@ -39,7 +40,7 @@ class StoreCard extends Component {
     const { storeData } = this.props;
     return (
       <div className="col-sm-6 col-md-4 col-lg-3">
-        <div className="card position-relative my-1">
+        <div className="card position-relative my-2">
           {img}
           <div className="card-body">
             <h4>

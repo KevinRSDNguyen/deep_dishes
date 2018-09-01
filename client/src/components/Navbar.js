@@ -95,11 +95,6 @@ class Navbar extends Component {
                 </Link>
               </li>
             )}
-            <li className="nav-item">
-              <a className="nav-link" href="">
-                <i className="fas fa-map-marker-alt" /> Map
-              </a>
-            </li>
           </ul>
 
           <StoreSearchInput />
