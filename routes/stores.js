@@ -5,6 +5,7 @@ const passport = require("passport");
 const multer = require("multer");
 const AWS = require("aws-sdk");
 const uuid = require("uuid/v1");
+const keys = require("../config/keys");
 const {
   normalizeErrors,
   confirmOwner,
@@ -22,6 +23,11 @@ const uploadService = multer({
     checkFileType(file, cb);
   }
 }).single("file");
+
+const s3 = new AWS.S3({
+  accessKeyId: keys.accessKeyId,
+  secretAccessKey: keys.secretAccessKey
+});
 
 // @route   GET api/stores/
 // @desc    Get all stores
@@ -86,6 +92,12 @@ router.get("/page/:page", (req, res) => {
 // @desc    Add store
 // @access  Private
 router.post("/add", auth, uploadService, jsonParseBody, (req, res) => {
+  if (req.file) {
+    const key = `${req.user.id}/${uuid()}`;
+    req.body.photo = key;
+    //Upload Service is Async
+    const { mimetype } = req.file;
+  }
   req.body.author = req.user._id;
   const newStore = new Store(req.body);
   newStore
@@ -191,31 +203,6 @@ router.get("/search", (req, res) => {
     })
     .limit(100)
     .exec()
-    .then(stores => {
-      res.json({ stores });
-    })
-    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
-});
-
-// @route   GET api/stores/near?lat=43&lng=-179
-// @desc    Get stores near
-// @access  Public
-router.get("/near", (req, res) => {
-  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
-  const q = {
-    location: {
-      $near: {
-        $geometry: {
-          type: "Point",
-          coordinates
-        },
-        $maxDistance: 10000 // 10km
-      }
-    }
-  };
-  Store.find(q)
-    .select("slug name description location") //Only fields we want
-    .limit(100)
     .then(stores => {
       res.json({ stores });
     })

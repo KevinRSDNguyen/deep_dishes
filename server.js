@@ -31,7 +31,7 @@ mongoose
     // fakeDb.seedDb();
   })
   .catch(err => {
-    console.log(err);
+    console.log("mongoose", err);
   });
 
 //Use Routes
@@ -47,6 +47,12 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
+
+app.use((error, request, response, next) => {
+  response.status(500).json({
+    errors: [{ detail: error }]
+  });
+});
 
 const port = process.env.PORT || 5000;
 

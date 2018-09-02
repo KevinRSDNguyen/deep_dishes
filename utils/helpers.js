@@ -32,7 +32,7 @@ module.exports = {
     if (mimetype && extname) {
       return cb(null, true);
     } else {
-      cb("Error: Images Only!"); //will be err for upload()
+      cb("Error: Images Only!", false); //will be err for upload()
     }
   },
   confirmOwner: function(store, user) {
