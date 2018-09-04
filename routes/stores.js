@@ -92,18 +92,81 @@ router.get("/page/:page", (req, res) => {
 // @desc    Add store
 // @access  Private
 router.post("/add", auth, uploadService, jsonParseBody, (req, res) => {
-  if (req.file) {
-    const key = `${req.user.id}/${uuid()}`;
-    req.body.photo = key;
-    //Upload Service is Async
-    const { mimetype } = req.file;
-  }
   req.body.author = req.user._id;
   const newStore = new Store(req.body);
-  newStore
-    .save()
+  if (req.file) {
+    const key = `${req.user.id}/${uuid()}`;
+    newStore.photo = key;
+    const { mimetype } = req.file;
+    newStore
+      .save()
+      .then(store => {
+        s3.putObject(
+          {
+            Body: req.file.buffer,
+            Bucket: "blogbucket-dev-kevinrsd",
+            ContentType: `${mimetype}`,
+            Key: key
+          },
+          (err, data) => {
+            res.json(store);
+          }
+        );
+      })
+      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  } else {
+    newStore
+      .save()
+      .then(store => {
+        res.json(store);
+      })
+      .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
+  }
+});
+
+// @route   POST api/stores/id/:id/edit
+// @desc    Edit store
+// @access  Private
+router.post("/id/:id/edit", auth, uploadService, jsonParseBody, (req, res) => {
+  Store.findOne({ _id: req.params.id })
     .then(store => {
-      res.json(store);
+      if (!confirmOwner(store, req.user)) {
+        return res.status(400).json({
+          errors: [{ detail: "You must have created this store to edit it!" }]
+        });
+      }
+      let updates = req.body;
+      if (req.file) {
+        const key = `${req.user.id}/${uuid()}`;
+        const oldImageUrl = store.photo;
+        updates.photo = key;
+        //Delete old image
+        s3.deleteObject(
+          {
+            Bucket: "blogbucket-dev-kevinrsd",
+            Key: oldImageUrl
+          },
+          (err, data) => {}
+        );
+        //Upload new image from user
+        s3.putObject(
+          {
+            Body: req.file.buffer,
+            Bucket: "blogbucket-dev-kevinrsd",
+            ContentType: req.file.mimetype,
+            Key: key
+          },
+          (err, data) => {}
+        );
+      }
+      return Store.findOneAndUpdate({ _id: req.params.id }, updates, {
+        new: true,
+        runValidators: true
+      })
+        .exec()
+        .then(store => {
+          res.json(store);
+        });
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
 });
@@ -133,31 +196,6 @@ router.get("/slug/:slug", (req, res) => {
       res.json(store);
     })
     .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
-});
-
-// @route   POST api/stores/id/:id/edit
-// @desc    Edit store
-// @access  Private
-router.post("/id/:id/edit", auth, (req, res) => {
-  Store.findOne({ _id: req.params.id })
-    .then(store => {
-      if (!confirmOwner(store, req.user)) {
-        return res.status(400).json({
-          errors: [{ detail: "You must have created this store to edit it!" }]
-        });
-      }
-      return Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
-        new: true,
-        runValidators: true
-      })
-        .exec()
-        .then(store => {
-          res.json(store);
-        });
-    })
-    .catch(err => res.status(422).json({ errors: normalizeErrors(err) }));
-  //Confirm they are the owner of the store
-  //Edit!
 });
 
 // @route   GET api/stores/tags

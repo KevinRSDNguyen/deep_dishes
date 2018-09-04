@@ -162,10 +162,18 @@ export const addStore = values => dispatch => {
     });
 };
 
-//Add Store
-export const editStore = (id, store) => dispatch => {
+//Edit Store
+export const editStore = (id, values) => dispatch => {
+  let formData = new FormData();
+  const config = {
+    header: { "content-type": "multipart/form-data" }
+  };
+  for (let key in values) {
+    formData.append(key, JSON.stringify(values[key]));
+  }
+  formData.append("file", values.file);
   return axios
-    .post(`/api/stores/id/${id}/edit`, store)
+    .post(`/api/stores/id/${id}/edit`, formData, config)
     .then(res => {
       return "Done";
     })

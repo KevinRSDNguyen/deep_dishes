@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Spinner from "./../common/Spinner/Spinner";
 import { connect } from "react-redux";
@@ -13,11 +12,6 @@ import { AmazonS3Url } from "./../../utility/helpers";
 class Store extends Component {
   componentDidMount() {
     this.props.getStoreBySlug(this.props.match.params.slug);
-    if (this.props.location.state && this.props.location.state.edited) {
-      toast.success("Store successfully updated!");
-    } else if (this.props.location.state && this.props.location.state.added) {
-      toast.success("Store successfully created!");
-    }
   }
   render() {
     const { store } = this.props.store;

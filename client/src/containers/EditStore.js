@@ -21,7 +21,7 @@ class EditStore extends Component {
       .editStore(this.props.match.params.id, store)
       .then(() => {
         this.props.history.push({
-          pathname: `/store/${store.slug}`,
+          pathname: `/stores`,
           state: { edited: true }
         });
       })

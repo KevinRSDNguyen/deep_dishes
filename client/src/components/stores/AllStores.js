@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
 import Stores from "./../Stores";
 import Pagination from "./../common/Pagination";
 import { connect } from "react-redux";
@@ -8,6 +9,11 @@ class AllStores extends Component {
   componentDidMount() {
     const currentPage = this.props.match.params.page;
     this.props.getStores(currentPage);
+    if (this.props.location.state && this.props.location.state.edited) {
+      toast.success("Store successfully updated!");
+    } else if (this.props.location.state && this.props.location.state.added) {
+      toast.success("Store successfully created!");
+    }
   }
   componentDidUpdate(prevProps) {
     const currentPage = this.props.match.params.page;

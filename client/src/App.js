@@ -7,7 +7,6 @@ import { auth } from "./actions/authActions";
 import PrivateRoute from "./components/common/PrivateRoute";
 import GuestRoute from "./components/common/GuestRoute";
 import Navbar from "./components/Navbar";
-import Landing from "./components/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/auth/Profile";
@@ -37,7 +36,6 @@ class App extends Component {
         <div className="container">
           <Switch>
             <Route exact path="/" render={() => <Redirect to="/stores" />} />
-            <Route exact path="/" component={Landing} />
             <GuestRoute exact path="/register" component={Register} />
             <GuestRoute exact path="/login" component={Login} />
             <PrivateRoute exact path="/profile" component={Profile} />

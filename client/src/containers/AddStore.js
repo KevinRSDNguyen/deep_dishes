@@ -10,7 +10,7 @@ class AddStore extends Component {
       .addStore(store)
       .then(store => {
         this.props.history.push({
-          pathname: `/store/${store.slug}`,
+          pathname: `/stores`,
           state: { added: true }
         });
       })
