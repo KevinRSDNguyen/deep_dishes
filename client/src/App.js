@@ -47,7 +47,7 @@ class App extends Component {
             <Route exact path="/tags/:tag" component={Tags} />
             <Route exact path="/store/:slug" component={Store} />
             <PrivateRoute exact path="/add" component={AddStore} />
-            <Route exact path="/stores/:id/edit" component={EditStore} />
+            <PrivateRoute exact path="/stores/:id/edit" component={EditStore} />
             <Route exact path="/stores" component={AllStores} />
             <Route exact path="/stores/page/:page" component={AllStores} />
             <Route

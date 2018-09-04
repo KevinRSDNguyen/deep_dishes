@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { loginUser, auth } from "./../../actions/authActions";
@@ -28,7 +28,6 @@ class Login extends Component {
   render() {
     return (
       <div className="login">
-        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">

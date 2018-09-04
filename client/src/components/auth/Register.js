@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { registerUser } from "./../../actions/authActions";
 import TextFieldGroup from "./../common/TextFieldGroup";
@@ -41,7 +41,6 @@ class Register extends Component {
   render() {
     return (
       <div className="register">
-        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
