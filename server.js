@@ -22,10 +22,7 @@ const db = require("./config/keys").mongoURI;
 //Connect to Mongoose
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true }
-  )
+  .connect(db)
   .then(() => {
     const fakeDb = new FakeDb();
     // fakeDb.seedDb();
