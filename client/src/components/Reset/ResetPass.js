@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TextFieldGroup from "./../common/TextFieldGroup";
 import axios from "axios";
 
@@ -44,7 +44,6 @@ class ResetPass extends Component {
   render() {
     return (
       <div className="container">
-        <ToastContainer />
         <form onSubmit={event => this.submitForm(event)}>
           <h2>Reset password</h2>
 

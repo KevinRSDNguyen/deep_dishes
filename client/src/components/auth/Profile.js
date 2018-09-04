@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TextFieldGroup from "./../common/TextFieldGroup";
 import { connect } from "react-redux";
 import { updateProfile, auth } from "./../../actions/authActions";
@@ -28,7 +28,6 @@ class Profile extends Component {
   render() {
     return (
       <div>
-        <ToastContainer />
         <form onSubmit={this.onSubmit}>
           <TextFieldGroup
             type="text"

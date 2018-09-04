@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TextFieldGroup from "./../common/TextFieldGroup";
 import axios from "axios";
 
@@ -31,7 +31,6 @@ class SendEmail extends Component {
         <h1>
           Enter your email and we will email you a link to change your password
         </h1>
-        <ToastContainer />
         <form onSubmit={this.submitForm}>
           <TextFieldGroup
             type="email"
